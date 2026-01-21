@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conference Room Reservation</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .reservation-item {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+
+        form {
+            margin-bottom: 30px;
+            border: 1px solid #eee;
+            padding: 15px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Room Reservations (room-1)</h1>
+
+    <form id="reservationForm">
+        <h3>Create Reservation</h3>
+        <label>Start Time (ISO/Local):
+            <input type="datetime-local" id="startTime" required>
+        </label>
+        <label>End Time (ISO/Local):
+            <input type="datetime-local" id="endTime" required>
+        </label>
+        <button type="submit" style="margin-top: 15px;">Reserve</button>
+        <div id="errorDisplay" class="error"></div>
+    </form>
+
+    <div id="reservationsList">
+        <h3>Existing Reservations</h3>
+        <div id="list"></div>
+    </div>
+
+    <script>
+        const roomId = 'room-1';
+        const form = document.getElementById('reservationForm');
+        const listDiv = document.getElementById('list');
+        const errorDisplay = document.getElementById('errorDisplay');
+
+        async function fetchReservations() {
+            try {
+                // Add a cache-buster timestamp to prevent stale data
+                const response = await fetch(`/reservations?roomId=${roomId}&_=${Date.now()}`);
+                const data = await response.json();
+                renderList(data);
+            } catch (err) {
+                console.error('Failed to fetch:', err);
+            }
+        }
+
+        function renderList(reservations) {
+            listDiv.innerHTML = '';
+            if (reservations.length === 0) {
+                listDiv.innerHTML = '<p>No reservations found.</p>';
+                return;
+            }
+            reservations.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+            reservations.forEach(res => {
+                const div = document.createElement('div');
+                div.className = 'reservation-item';
+                div.innerHTML = `
+                    <span>
+                        <strong>From:</strong> ${new Date(res.startTime).toLocaleString()} <br>
+                        <strong>To:</strong> ${new Date(res.endTime).toLocaleString()}
+                    </span>
+                    <button onclick="deleteReservation('${res.id}')">Cancel</button>
+                `;
+                listDiv.appendChild(div);
+            });
+        }
+
+        async function deleteReservation(id) {
+            if (!confirm('Are you sure you want to cancel this reservation?')) return;
+            try {
+                console.log('Cancelling reservation:', id);
+                const response = await fetch(`/reservations/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    console.log('Reservation cancelled successfully');
+                    await fetchReservations();
+                } else {
+                    const err = await response.json();
+                    console.error('Cancellation failed:', err);
+                    alert(err.error || 'Failed to delete');
+                }
+            } catch (err) {
+                console.error('Delete failed:', err);
+            }
+        }
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            errorDisplay.innerText = '';
+
+            const startTime = new Date(document.getElementById('startTime').value).toISOString();
+            const endTime = new Date(document.getElementById('endTime').value).toISOString();
+
+            try {
+                const response = await fetch('/reservations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ roomId, startTime, endTime })
+                });
+
+                if (response.ok) {
+                    form.reset();
+                    fetchReservations();
+                } else {
+                    const err = await response.json();
+                    errorDisplay.innerText = err.error || 'An error occurred';
+                }
+            } catch (err) {
+                errorDisplay.innerText = 'Network error';
+            }
+        };
+
+        fetchReservations();
+    </script>
+</body>
+
+</html>
