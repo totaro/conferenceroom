@@ -155,12 +155,30 @@
                 if (response.ok) {
                     form.reset();
                     fetchReservations();
+                    errorDisplay.style.color = 'green';
+                    errorDisplay.innerText = '✅ Reservation created successfully!';
+                    setTimeout(() => { errorDisplay.innerText = ''; }, 3000);
+                } else if (response.status === 400) {
+                    // Validation error (bad request)
+                    const err = await response.json().catch(() => ({ error: 'Validation failed' }));
+                    errorDisplay.style.color = 'red';
+                    errorDisplay.innerText = `⚠️ ${err.error || 'Invalid reservation data'}`;
+                } else if (response.status >= 500) {
+                    // Server error
+                    console.error('Server error:', response.status);
+                    errorDisplay.style.color = 'red';
+                    errorDisplay.innerText = '⚠️ Server error. Please try again in a moment.';
                 } else {
-                    const err = await response.json();
-                    errorDisplay.innerText = err.error || 'An error occurred';
+                    // Other HTTP errors
+                    const err = await response.json().catch(() => ({ error: 'Unknown error' }));
+                    errorDisplay.style.color = 'red';
+                    errorDisplay.innerText = `⚠️ ${err.error || 'An error occurred'}`;
                 }
             } catch (err) {
-                errorDisplay.innerText = 'Network error';
+                // Network errors (server unreachable, no internet, etc.)
+                console.error('Network error during reservation creation:', err);
+                errorDisplay.style.color = 'red';
+                errorDisplay.innerText = '❌ Network error. Please check your connection and try again.';
             }
         };
 
