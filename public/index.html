@@ -257,8 +257,26 @@
             e.preventDefault();
             errorDisplay.innerText = '';
 
-            const startTime = new Date(document.getElementById('startTime').value).toISOString();
-            const endTime = new Date(document.getElementById('endTime').value).toISOString();
+            const startTime = new Date(document.getElementById('startTime').value);
+            const endTime = new Date(document.getElementById('endTime').value);
+            const now = new Date();
+
+            // Client-side validation
+            if (startTime < now) {
+                errorDisplay.style.color = 'red';
+                errorDisplay.innerText = '⚠️ Start time must be in the future.';
+                return;
+            }
+
+            if (startTime >= endTime) {
+                errorDisplay.style.color = 'red';
+                errorDisplay.innerText = '⚠️ End time must be after start time.';
+                return;
+            }
+
+            // Convert to ISO strings for server
+            const startTimeISO = startTime.toISOString();
+            const endTimeISO = endTime.toISOString();
 
             // Disable submit button and show loading state
             submitBtn.disabled = true;
@@ -269,7 +287,7 @@
                 const response = await fetch('/reservations', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ roomId, startTime, endTime })
+                    body: JSON.stringify({ roomId, startTime: startTimeISO, endTime: endTimeISO })
                 });
 
                 if (response.ok) {
