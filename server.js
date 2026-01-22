@@ -32,7 +32,23 @@ let reservations = [];
 // Promise-based lock to prevent race conditions
 let reservationLock = Promise.resolve();
 
-// Business Rules Enforcement
+/**
+ * Validates a reservation against business rules.
+ * 
+ * Rules:
+ * 1. Dates must be valid
+ * 2. Start time must be before end time
+ * 3. Start time cannot be in the past
+ * 4. Duration must be between 15 minutes and 8 hours
+ * 5. Reservation cannot be more than 90 days in advance
+ * 6. No overlapping reservations for the same room
+ * 
+ * @param {Object} newReservation - The reservation object to validate
+ * @param {string} newReservation.roomId - The ID of the room
+ * @param {string} newReservation.startTime - ISO 8601 start time
+ * @param {string} newReservation.endTime - ISO 8601 end time
+ * @returns {string|null} Error message if invalid, null if valid
+ */
 const validateReservation = (newReservation) => {
     const start = new Date(newReservation.startTime);
     const end = new Date(newReservation.endTime);
@@ -88,7 +104,13 @@ const validateReservation = (newReservation) => {
     return null;
 };
 
-// GET /reservations
+/**
+ * GET /reservations
+ * Retrieves all reservations, optionally filtered by room ID.
+ * 
+ * @query {string} [roomId] - Optional room ID to filter results
+ * @returns {Array<Object>} List of reservation objects
+ */
 app.get('/reservations', (req, res) => {
     const { roomId } = req.query;
     if (roomId) {
@@ -97,7 +119,18 @@ app.get('/reservations', (req, res) => {
     res.json(reservations);
 });
 
-// POST /reservations
+/**
+ * POST /reservations
+ * Creates a new reservation if it passes all validation rules.
+ * Uses a promise-based lock to prevent race conditions during concurrent requests.
+ * 
+ * @body {string} roomId - The ID of the room
+ * @body {string} startTime - ISO 8601 start time string
+ * @body {string} endTime - ISO 8601 end time string
+ * @returns {Object} Created reservation object with ID
+ * @throws {400} If validation fails
+ * @throws {500} If internal server error occurs
+ */
 app.post('/reservations', (req, res) => {
     const { roomId, startTime, endTime } = req.body;
 
@@ -145,7 +178,14 @@ app.post('/reservations', (req, res) => {
     });
 });
 
-// DELETE /reservations/:id
+/**
+ * DELETE /reservations/:id
+ * cancel a reservation by ID.
+ * 
+ * @param {string} id - The UUID of the reservation to delete
+ * @returns {204} No Content on success
+ * @throws {404} If reservation is not found
+ */
 app.delete('/reservations/:id', (req, res) => {
     const { id } = req.params;
     console.log(`DELETE request received for reservation ID: ${id}`);
