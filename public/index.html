@@ -63,6 +63,7 @@
         const form = document.getElementById('reservationForm');
         const listDiv = document.getElementById('list');
         const errorDisplay = document.getElementById('errorDisplay');
+        const submitBtn = form.querySelector('button[type="submit"]');
 
         // Helper function to show temporary notifications
         function showNotification(message, type = 'error', duration = 4000) {
@@ -77,6 +78,9 @@
         }
 
         async function fetchReservations() {
+            // Show loading state
+            listDiv.innerHTML = '<p>Loading reservations...</p>';
+
             try {
                 // Add a cache-buster timestamp to prevent stale data
                 const response = await fetch(`/reservations?roomId=${roomId}&_=${Date.now()}`);
@@ -157,6 +161,11 @@
             const startTime = new Date(document.getElementById('startTime').value).toISOString();
             const endTime = new Date(document.getElementById('endTime').value).toISOString();
 
+            // Disable submit button and show loading state
+            submitBtn.disabled = true;
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Reserving...';
+
             try {
                 const response = await fetch('/reservations', {
                     method: 'POST',
@@ -191,6 +200,10 @@
                 console.error('Network error during reservation creation:', err);
                 errorDisplay.style.color = 'red';
                 errorDisplay.innerText = '❌ Network error. Please check your connection and try again.';
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
             }
         };
 
