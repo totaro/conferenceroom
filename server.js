@@ -32,6 +32,27 @@ const validateReservation = (newReservation) => {
         return "Reservations cannot be made in the past.";
     }
 
+    // Duration validation
+    const durationMs = end - start;
+    const minDuration = 15 * 60 * 1000; // 15 minutes in milliseconds
+    const maxDuration = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
+
+    if (durationMs < minDuration) {
+        return "Reservation must be at least 15 minutes long.";
+    }
+
+    if (durationMs > maxDuration) {
+        return "Reservation cannot exceed 8 hours.";
+    }
+
+    // Future date validation
+    const maxFutureDays = 90;
+    const maxFutureDate = new Date(now.getTime() + maxFutureDays * 24 * 60 * 60 * 1000);
+
+    if (start > maxFutureDate) {
+        return `Reservations can only be made up to ${maxFutureDays} days in advance.`;
+    }
+
     // Overlap check
     const overlapping = reservations.find(res => {
         if (res.roomId !== newReservation.roomId) return false;
