@@ -68,11 +68,11 @@
             try {
                 // Add a cache-buster timestamp to prevent stale data
                 const response = await fetch(`/reservations?roomId=${roomId}&_=${Date.now()}`);
-                
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                
+
                 const data = await response.json();
                 renderList(data);
             } catch (err) {
@@ -113,19 +113,28 @@
             try {
                 console.log('Cancelling reservation:', id);
                 const response = await fetch(`/reservations/${id}`, { method: 'DELETE' });
+
                 if (response.ok) {
                     console.log('Reservation cancelled successfully');
                     await fetchReservations();
-                    // Add visual feedback
-                    alert('Reservation cancelled successfully!');
+                    alert('✅ Reservation cancelled successfully!');
+                } else if (response.status === 404) {
+                    console.error('Reservation not found:', id);
+                    alert('⚠️ This reservation no longer exists. The list will be refreshed.');
+                    await fetchReservations();
+                } else if (response.status >= 500) {
+                    console.error('Server error:', response.status);
+                    alert('⚠️ Server error occurred. Please try again in a moment.');
                 } else {
-                    const err = await response.json();
+                    // 400 or other client errors
+                    const err = await response.json().catch(() => ({ error: 'Unknown error' }));
                     console.error('Cancellation failed:', err);
-                    alert(err.error || 'Failed to delete');
+                    alert(`⚠️ Failed to cancel: ${err.error || 'Unknown error'}`);
                 }
             } catch (err) {
-                console.error('Delete failed:', err);
-                alert('Network error. Please try again.');
+                // Network errors (server unreachable, no internet, etc.)
+                console.error('Network error during deletion:', err);
+                alert('❌ Network error. Please check your connection and try again.');
             }
         }
 
