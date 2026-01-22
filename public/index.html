@@ -64,6 +64,18 @@
         const listDiv = document.getElementById('list');
         const errorDisplay = document.getElementById('errorDisplay');
 
+        // Helper function to show temporary notifications
+        function showNotification(message, type = 'error', duration = 4000) {
+            errorDisplay.style.color = type === 'success' ? 'green' : 'red';
+            errorDisplay.innerText = message;
+
+            if (type === 'success' && duration > 0) {
+                setTimeout(() => {
+                    errorDisplay.innerText = '';
+                }, duration);
+            }
+        }
+
         async function fetchReservations() {
             try {
                 // Add a cache-buster timestamp to prevent stale data
@@ -117,24 +129,24 @@
                 if (response.ok) {
                     console.log('Reservation cancelled successfully');
                     await fetchReservations();
-                    alert('✅ Reservation cancelled successfully!');
+                    showNotification('✅ Reservation cancelled successfully!', 'success');
                 } else if (response.status === 404) {
                     console.error('Reservation not found:', id);
-                    alert('⚠️ This reservation no longer exists. The list will be refreshed.');
+                    showNotification('⚠️ This reservation no longer exists. The list will be refreshed.', 'error');
                     await fetchReservations();
                 } else if (response.status >= 500) {
                     console.error('Server error:', response.status);
-                    alert('⚠️ Server error occurred. Please try again in a moment.');
+                    showNotification('⚠️ Server error occurred. Please try again in a moment.', 'error');
                 } else {
                     // 400 or other client errors
                     const err = await response.json().catch(() => ({ error: 'Unknown error' }));
                     console.error('Cancellation failed:', err);
-                    alert(`⚠️ Failed to cancel: ${err.error || 'Unknown error'}`);
+                    showNotification(`⚠️ Failed to cancel: ${err.error || 'Unknown error'}`, 'error');
                 }
             } catch (err) {
                 // Network errors (server unreachable, no internet, etc.)
                 console.error('Network error during deletion:', err);
-                alert('❌ Network error. Please check your connection and try again.');
+                showNotification('❌ Network error. Please check your connection and try again.', 'error');
             }
         }
 
