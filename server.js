@@ -131,7 +131,7 @@ app.get('/reservations', (req, res) => {
  * @throws {400} If validation fails
  * @throws {500} If internal server error occurs
  */
-app.post('/reservations', (req, res) => {
+app.post('/reservations', (req, res, next) => {
     const { roomId, startTime, endTime } = req.body;
 
     if (!roomId || !startTime || !endTime) {
@@ -172,9 +172,8 @@ app.post('/reservations', (req, res) => {
         res.status(201).json(newReservation);
     }).catch(err => {
         console.error('Error processing reservation:', err);
-        if (!res.headersSent) {
-            res.status(500).json({ error: "Internal server error" });
-        }
+        // Pass error to the global error handler
+        next(err);
     });
 });
 
@@ -199,6 +198,24 @@ app.delete('/reservations/:id', (req, res) => {
 
     console.log(`Successfully deleted reservation: ${id}`);
     res.status(204).send();
+});
+
+/**
+ * Global Error Handler Middleware
+ * Catches any unhandled errors and ensures a consistent JSON response.
+ */
+app.use((err, req, res, next) => {
+    console.error('Unhandled Error:', err);
+
+    // Prevent double-sending headers
+    if (res.headersSent) {
+        return next(err);
+    }
+
+    res.status(500).json({
+        error: "Internal Server Error",
+        message: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
 });
 
 app.listen(port, () => {
