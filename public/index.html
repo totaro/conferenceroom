@@ -96,7 +96,7 @@
                         <strong>From:</strong> ${new Date(res.startTime).toLocaleString()} <br>
                         <strong>To:</strong> ${new Date(res.endTime).toLocaleString()}
                     </span>
-                    <button onclick="deleteReservation('${res.id}')">Cancel</button>
+                    <button class="cancel-btn" data-id="${res.id}">Cancel</button>
                 `;
                 listDiv.appendChild(div);
             });
@@ -181,6 +181,16 @@
                 errorDisplay.innerText = '❌ Network error. Please check your connection and try again.';
             }
         };
+
+        // Event delegation for cancel buttons
+        listDiv.addEventListener('click', (e) => {
+            if (e.target.classList.contains('cancel-btn')) {
+                const reservationId = e.target.dataset.id;
+                if (reservationId) {
+                    deleteReservation(reservationId);
+                }
+            }
+        });
 
         fetchReservations();
     </script>
