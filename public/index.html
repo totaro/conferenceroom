@@ -68,10 +68,16 @@
             try {
                 // Add a cache-buster timestamp to prevent stale data
                 const response = await fetch(`/reservations?roomId=${roomId}&_=${Date.now()}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 renderList(data);
             } catch (err) {
-                console.error('Failed to fetch:', err);
+                console.error('Failed to fetch reservations:', err);
+                listDiv.innerHTML = '<p style="color: red;">⚠️ Failed to load reservations. Please refresh the page or try again later.</p>';
             }
         }
 
