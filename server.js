@@ -92,6 +92,21 @@ app.post('/reservations', (req, res) => {
         return res.status(400).json({ error: "Missing required fields." });
     }
 
+    // Validate roomId
+    if (typeof roomId !== 'string') {
+        return res.status(400).json({ error: "Room ID must be a string." });
+    }
+
+    const trimmedRoomId = roomId.trim();
+
+    if (trimmedRoomId.length === 0) {
+        return res.status(400).json({ error: "Room ID cannot be empty." });
+    }
+
+    if (trimmedRoomId.length > 50) {
+        return res.status(400).json({ error: "Room ID cannot exceed 50 characters." });
+    }
+
     // Use promise chaining to ensure atomic validation and insertion
     reservationLock = reservationLock.then(() => {
         const error = validateReservation({ roomId, startTime, endTime });
