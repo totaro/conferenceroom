@@ -1,0 +1,220 @@
+const roomId = 'room-1';
+const form = document.getElementById('reservationForm');
+const listDiv = document.getElementById('list');
+const errorDisplay = document.getElementById('errorDisplay');
+const submitBtn = form.querySelector('button[type="submit"]');
+const notificationContainer = document.getElementById('notificationContainer');
+
+// Helper function to show temporary notifications
+function showNotification(message, type = 'error', duration = 3000) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+
+    // Create message span
+    const messageSpan = document.createElement('span');
+    messageSpan.textContent = message;
+    notification.appendChild(messageSpan);
+
+    // Create close button
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'close-btn';
+    closeBtn.innerHTML = '&times;';
+    closeBtn.setAttribute('aria-label', 'Close notification');
+    notification.appendChild(closeBtn);
+
+    // Add to container
+    notificationContainer.appendChild(notification);
+
+    // Auto-remove after duration
+    let timeoutId;
+    if (duration > 0) {
+        timeoutId = setTimeout(() => {
+            removeNotification(notification);
+        }, duration);
+    }
+
+    // Manual close
+    closeBtn.addEventListener('click', () => {
+        if (timeoutId) clearTimeout(timeoutId);
+        removeNotification(notification);
+    });
+
+    function removeNotification(element) {
+        element.style.animation = 'fadeOut 0.3s ease-out';
+        setTimeout(() => {
+            element.remove();
+        }, 300);
+    }
+}
+
+async function fetchReservations() {
+    // Show loading state
+    listDiv.innerHTML = '<p>Loading reservations...</p>';
+
+    try {
+        // Add a cache-buster timestamp to prevent stale data
+        const response = await fetch(`/reservations?roomId=${roomId}&_=${Date.now()}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        renderList(data);
+    } catch (err) {
+        console.error('Failed to fetch reservations:', err);
+        listDiv.innerHTML = '<p style="color: red;">⚠️ Failed to load reservations. Please refresh the page or try again later.</p>';
+    }
+}
+
+function renderList(reservations) {
+    listDiv.innerHTML = '';
+    if (reservations.length === 0) {
+        listDiv.innerHTML = '<p>No reservations found.</p>';
+        return;
+    }
+    reservations.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+    reservations.forEach(res => {
+        const div = document.createElement('div');
+        div.className = 'reservation-item';
+
+        // Format dates with day of week and 24-hour time
+        const startDate = new Date(res.startTime);
+        const endDate = new Date(res.endTime);
+
+        const formatOptions = {
+            weekday: 'short',  // Mon, Tue, etc.
+            month: 'short',    // Jan, Feb, etc.
+            day: 'numeric',    // 22
+            year: 'numeric',   // 2026
+            hour: '2-digit',   // 14
+            minute: '2-digit', // 30
+            hour12: false      // 24-hour time
+        };
+
+        const startFormatted = startDate.toLocaleString('en-US', formatOptions);
+        const endFormatted = endDate.toLocaleString('en-US', formatOptions);
+
+        div.innerHTML = `
+            <span>
+                <strong>From:</strong> ${startFormatted}<br>
+                <strong>To:</strong> ${endFormatted}
+            </span>
+            <button class="cancel-btn" data-id="${res.id}">Cancel</button>
+        `;
+        listDiv.appendChild(div);
+    });
+}
+
+async function deleteReservation(id) {
+    try {
+        console.log('Cancelling reservation:', id);
+        const response = await fetch(`/reservations/${id}`, { method: 'DELETE' });
+
+        if (response.ok) {
+            console.log('Reservation cancelled successfully');
+            await fetchReservations();
+            showNotification('✅ Reservation cancelled successfully!', 'success');
+        } else if (response.status === 404) {
+            console.error('Reservation not found:', id);
+            showNotification('⚠️ This reservation no longer exists. The list will be refreshed.', 'error');
+            await fetchReservations();
+        } else if (response.status >= 500) {
+            console.error('Server error:', response.status);
+            showNotification('⚠️ Server error occurred. Please try again in a moment.', 'error');
+        } else {
+            // 400 or other client errors
+            const err = await response.json().catch(() => ({ error: 'Unknown error' }));
+            console.error('Cancellation failed:', err);
+            showNotification(`⚠️ Failed to cancel: ${err.error || 'Unknown error'}`, 'error');
+        }
+    } catch (err) {
+        // Network errors (server unreachable, no internet, etc.)
+        console.error('Network error during deletion:', err);
+        showNotification('❌ Network error. Please check your connection and try again.', 'error');
+    }
+}
+
+form.onsubmit = async (e) => {
+    e.preventDefault();
+    errorDisplay.innerText = '';
+
+    const startTime = new Date(document.getElementById('startTime').value);
+    const endTime = new Date(document.getElementById('endTime').value);
+    const now = new Date();
+
+    // Client-side validation
+    if (startTime < now) {
+        errorDisplay.style.color = 'red';
+        errorDisplay.innerText = '⚠️ Start time must be in the future.';
+        return;
+    }
+
+    if (startTime >= endTime) {
+        errorDisplay.style.color = 'red';
+        errorDisplay.innerText = '⚠️ End time must be after start time.';
+        return;
+    }
+
+    // Convert to ISO strings for server
+    const startTimeISO = startTime.toISOString();
+    const endTimeISO = endTime.toISOString();
+
+    // Disable submit button and show loading state
+    submitBtn.disabled = true;
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Reserving...';
+
+    try {
+        const response = await fetch('/reservations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ roomId, startTime: startTimeISO, endTime: endTimeISO })
+        });
+
+        if (response.ok) {
+            form.reset();
+            fetchReservations();
+            errorDisplay.style.color = 'green';
+            errorDisplay.innerText = '✅ Reservation created successfully!';
+            setTimeout(() => { errorDisplay.innerText = ''; }, 3000);
+        } else if (response.status === 400) {
+            // Validation error (bad request)
+            const err = await response.json().catch(() => ({ error: 'Validation failed' }));
+            errorDisplay.style.color = 'red';
+            errorDisplay.innerText = `⚠️ ${err.error || 'Invalid reservation data'}`;
+        } else if (response.status >= 500) {
+            // Server error
+            console.error('Server error:', response.status);
+            errorDisplay.style.color = 'red';
+            errorDisplay.innerText = '⚠️ Server error. Please try again in a moment.';
+        } else {
+            // Other HTTP errors
+            const err = await response.json().catch(() => ({ error: 'Unknown error' }));
+            errorDisplay.style.color = 'red';
+            errorDisplay.innerText = `⚠️ ${err.error || 'An error occurred'}`;
+        }
+    } catch (err) {
+        // Network errors (server unreachable, no internet, etc.)
+        console.error('Network error during reservation creation:', err);
+        errorDisplay.style.color = 'red';
+        errorDisplay.innerText = '❌ Network error. Please check your connection and try again.';
+    } finally {
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+    }
+};
+
+// Event delegation for cancel buttons
+listDiv.addEventListener('click', (e) => {
+    if (e.target.classList.contains('cancel-btn')) {
+        const reservationId = e.target.dataset.id;
+        if (reservationId) {
+            deleteReservation(reservationId);
+        }
+    }
+});
+
+fetchReservations();
