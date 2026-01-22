@@ -11,6 +11,9 @@ app.use(express.static('public'));
 
 let reservations = [];
 
+// Promise-based lock to prevent race conditions
+let reservationLock = Promise.resolve();
+
 // Business Rules Enforcement
 const validateReservation = (newReservation) => {
     const start = new Date(newReservation.startTime);
@@ -63,20 +66,29 @@ app.post('/reservations', (req, res) => {
         return res.status(400).json({ error: "Missing required fields." });
     }
 
-    const error = validateReservation({ roomId, startTime, endTime });
-    if (error) {
-        return res.status(400).json({ error });
-    }
+    // Use promise chaining to ensure atomic validation and insertion
+    reservationLock = reservationLock.then(() => {
+        const error = validateReservation({ roomId, startTime, endTime });
+        if (error) {
+            res.status(400).json({ error });
+            return;
+        }
 
-    const newReservation = {
-        id: crypto.randomUUID(),
-        roomId,
-        startTime,
-        endTime
-    };
+        const newReservation = {
+            id: crypto.randomUUID(),
+            roomId,
+            startTime,
+            endTime
+        };
 
-    reservations.push(newReservation);
-    res.status(201).json(newReservation);
+        reservations.push(newReservation);
+        res.status(201).json(newReservation);
+    }).catch(err => {
+        console.error('Error processing reservation:', err);
+        if (!res.headersSent) {
+            res.status(500).json({ error: "Internal server error" });
+        }
+    });
 });
 
 // DELETE /reservations/:id
