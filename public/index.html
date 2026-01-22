@@ -213,10 +213,28 @@
             reservations.forEach(res => {
                 const div = document.createElement('div');
                 div.className = 'reservation-item';
+
+                // Format dates with day of week and 24-hour time
+                const startDate = new Date(res.startTime);
+                const endDate = new Date(res.endTime);
+
+                const formatOptions = {
+                    weekday: 'short',  // Mon, Tue, etc.
+                    month: 'short',    // Jan, Feb, etc.
+                    day: 'numeric',    // 22
+                    year: 'numeric',   // 2026
+                    hour: '2-digit',   // 14
+                    minute: '2-digit', // 30
+                    hour12: false      // 24-hour time
+                };
+
+                const startFormatted = startDate.toLocaleString('en-US', formatOptions);
+                const endFormatted = endDate.toLocaleString('en-US', formatOptions);
+
                 div.innerHTML = `
                     <span>
-                        <strong>From:</strong> ${new Date(res.startTime).toLocaleString()} <br>
-                        <strong>To:</strong> ${new Date(res.endTime).toLocaleString()}
+                        <strong>From:</strong> ${startFormatted}<br>
+                        <strong>To:</strong> ${endFormatted}
                     </span>
                     <button class="cancel-btn" data-id="${res.id}">Cancel</button>
                 `;
