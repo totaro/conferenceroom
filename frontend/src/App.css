@@ -9,6 +9,45 @@
   animation: fadeIn 0.4s ease-in;
 }
 
+/* ============================================
+   NOTIFICATION COMPONENT
+   ============================================ */
+.notification {
+  position: fixed;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--success);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  box-shadow: var(--shadow-xl);
+  font-weight: 600;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  animation: slideDown 0.4s ease-out;
+  min-width: 300px;
+  justify-content: center;
+}
+
+.notification.error {
+  background-color: var(--error);
+}
+
+@keyframes slideDown {
+  from {
+    top: -100px;
+    opacity: 0;
+  }
+
+  to {
+    top: 2rem;
+    opacity: 1;
+  }
+}
+
 h1 {
   color: var(--gray-900);
   margin-bottom: 2.5rem;

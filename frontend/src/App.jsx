@@ -17,9 +17,21 @@ function App() {
   const [selectedSlot, setSelectedSlot] = useState(null)
   const [isEditing, setIsEditing] = useState(false)
 
+  // Notification state
+  const [notification, setNotification] = useState(null)
+
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type })
+    setTimeout(() => {
+      setNotification(null)
+    }, 3000)
+  }
+
+  // Event details modal state
   // Event details modal state
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   // Calendar state
   const [view, setView] = useState('week')
@@ -92,7 +104,7 @@ function App() {
     // Prevent booking in the past
     const now = new Date()
     if (slotInfo.start < now) {
-      alert("You cannot book a reservation in the past.")
+      showNotification("You cannot book a reservation in the past.", 'error')
       return
     }
 
@@ -266,11 +278,11 @@ function App() {
       const updatedReservations = await reservationsResponse.json()
       setReservations(updatedReservations)
 
-      alert(`✅ Reservation ${isEditing ? 'updated' : 'created'} successfully!`)
+      showNotification(`✅ Reservation ${isEditing ? 'updated' : 'created'} successfully!`)
 
     } catch (error) {
       console.error(`Error ${isEditing ? 'updating' : 'creating'} reservation:`, error)
-      alert(`❌ Failed to ${isEditing ? 'update' : 'create'} reservation. Please try again.`)
+      showNotification(`❌ Failed to ${isEditing ? 'update' : 'create'} reservation. Please try again.`, 'error')
     }
   }
 
@@ -309,15 +321,6 @@ function App() {
   const handleConfirmDelete = async () => {
     if (!selectedEvent) return
 
-    // Confirm before deleting
-    const confirmDelete = window.confirm(
-      `Are you sure you want to cancel "${selectedEvent.title}"?`
-    )
-
-    if (!confirmDelete) {
-      return
-    }
-
     try {
       // DELETE from JSON Server
       const response = await fetch(`http://localhost:3001/reservations/${selectedEvent.id}`, {
@@ -335,20 +338,27 @@ function App() {
       const updatedReservations = await reservationsResponse.json()
       setReservations(updatedReservations)
 
-      // Close modal
+      // Close modals
+      setShowDeleteConfirm(false)
       setIsDetailsModalOpen(false)
       setSelectedEvent(null)
 
-      alert('✅ Reservation cancelled successfully!')
+      showNotification('✅ Reservation cancelled successfully!')
 
     } catch (error) {
       console.error('Error deleting reservation:', error)
-      alert('❌ Failed to cancel reservation. Please try again.')
+      showNotification('❌ Failed to cancel reservation. Please try again.', 'error')
     }
   }
 
   return (
     <div className="app">
+      {notification && (
+        <div className={`notification ${notification.type}`}>
+          {notification.message}
+        </div>
+      )}
+
       <h1>Room Reservation System</h1>
 
       <div className="room-selector-section">
@@ -647,9 +657,40 @@ function App() {
                 <button
                   className="btn-submit"
                   style={{ background: 'var(--error)', borderColor: 'var(--error)' }}
-                  onClick={handleConfirmDelete}
+                  onClick={() => setShowDeleteConfirm(true)}
                 >
                   Cancel Reservation
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="modal-overlay" style={{ zIndex: 2000 }}>
+          <div className="modal-content" style={{ maxWidth: '400px', textAlign: 'center' }}>
+            <div className="modal-body">
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚠️</div>
+              <h2 style={{ color: 'var(--gray-900)', marginBottom: '0.5rem' }}>Are you sure?</h2>
+              <p style={{ color: 'var(--gray-600)', marginBottom: '2rem' }}>
+                Do you really want to delete this reservation? This action cannot be undone.
+              </p>
+
+              <div className="form-actions" style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <button
+                  className="btn-cancel"
+                  onClick={() => setShowDeleteConfirm(false)}
+                >
+                  Keep Reservation
+                </button>
+                <button
+                  className="btn-submit"
+                  style={{ background: 'var(--error)', borderColor: 'var(--error)' }}
+                  onClick={handleConfirmDelete}
+                >
+                  Yes, Delete
                 </button>
               </div>
             </div>
