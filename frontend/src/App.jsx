@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react'
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import moment from 'moment'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
 import './App.css'
+
+// Setup the localizer for react-big-calendar
+const localizer = momentLocalizer(moment)
 
 function App() {
   const [rooms, setRooms] = useState([])
@@ -78,6 +84,21 @@ function App() {
           </>
         )}
       </div>
+
+      {/* Calendar Section */}
+      {selectedRoom && (
+        <div className="calendar-section">
+          <h2>Reservations for {selectedRoom.name}</h2>
+          <Calendar
+            localizer={localizer}
+            events={[]}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: 600 }}
+            defaultView="week"
+          />
+        </div>
+      )}
 
       <div className="connection-status">
         {!loading && !error && (

@@ -73,6 +73,13 @@ h3 {
   margin-right: 0.5rem;
 }
 
+.calendar-section {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
 .error {
   color: #d32f2f;
   background: #ffebee;
