@@ -147,6 +147,41 @@ function App() {
     }
   }
 
+  const handleDeleteReservation = async (event) => {
+    // Confirm before deleting
+    const confirmDelete = window.confirm(
+      `Are you sure you want to cancel "${event.title}"?\n\nTime: ${event.start.toLocaleString()} - ${event.end.toLocaleString()}`
+    )
+
+    if (!confirmDelete) {
+      return
+    }
+
+    try {
+      // DELETE from JSON Server
+      const response = await fetch(`http://localhost:3001/reservations/${event.id}`, {
+        method: 'DELETE'
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete reservation')
+      }
+
+      console.log('Reservation deleted:', event.id)
+
+      // Refresh calendar to remove deleted reservation
+      const reservationsResponse = await fetch(`http://localhost:3001/reservations?roomId=${selectedRoom.id}`)
+      const updatedReservations = await reservationsResponse.json()
+      setReservations(updatedReservations)
+
+      alert('✅ Reservation cancelled successfully!')
+
+    } catch (error) {
+      console.error('Error deleting reservation:', error)
+      alert('❌ Failed to cancel reservation. Please try again.')
+    }
+  }
+
   return (
     <div className="app">
       <h1>Room Reservation System</h1>
@@ -203,6 +238,7 @@ function App() {
             defaultView="week"
             selectable
             onSelectSlot={handleSelectSlot}
+            onSelectEvent={handleDeleteReservation}
           />
         </div>
       )}
