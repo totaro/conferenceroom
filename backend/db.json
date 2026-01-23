@@ -1,63 +1,77 @@
 {
-    "rooms": [
-        {
-            "id": "room-1",
-            "name": "Conference Room 1",
-            "capacity": 10
-        },
-        {
-            "id": "room-2",
-            "name": "Conference Room 2",
-            "capacity": 6
-        },
-        {
-            "id": "room-3",
-            "name": "Conference Room 3",
-            "capacity": 4
-        }
-    ],
-    "reservations": [
-        {
-            "id": "1",
-            "roomId": "room-1",
-            "title": "Team Standup",
-            "startTime": "2026-01-23T09:00:00",
-            "endTime": "2026-01-23T10:00:00"
-        },
-        {
-            "id": "2",
-            "roomId": "room-1",
-            "title": "Client Meeting",
-            "startTime": "2026-01-23T14:00:00",
-            "endTime": "2026-01-23T15:30:00"
-        },
-        {
-            "id": "3",
-            "roomId": "room-1",
-            "title": "Sprint Planning",
-            "startTime": "2026-01-24T10:00:00",
-            "endTime": "2026-01-24T12:00:00"
-        },
-        {
-            "id": "4",
-            "roomId": "room-2",
-            "title": "Design Review",
-            "startTime": "2026-01-23T11:00:00",
-            "endTime": "2026-01-23T12:00:00"
-        },
-        {
-            "id": "5",
-            "roomId": "room-2",
-            "title": "1-on-1 Meeting",
-            "startTime": "2026-01-24T15:00:00",
-            "endTime": "2026-01-24T16:00:00"
-        },
-        {
-            "id": "6",
-            "roomId": "room-3",
-            "title": "Interview",
-            "startTime": "2026-01-23T13:00:00",
-            "endTime": "2026-01-23T14:00:00"
-        }
-    ]
+  "rooms": [
+    {
+      "id": "room-1",
+      "name": "Conference Room 1",
+      "capacity": 10
+    },
+    {
+      "id": "room-2",
+      "name": "Conference Room 2",
+      "capacity": 6
+    },
+    {
+      "id": "room-3",
+      "name": "Conference Room 3",
+      "capacity": 4
+    }
+  ],
+  "reservations": [
+    {
+      "id": "1",
+      "roomId": "room-1",
+      "title": "Team Standup",
+      "startTime": "2026-01-23T09:00:00",
+      "endTime": "2026-01-23T10:00:00"
+    },
+    {
+      "id": "2",
+      "roomId": "room-1",
+      "title": "Client Meeting",
+      "startTime": "2026-01-23T14:00:00",
+      "endTime": "2026-01-23T15:30:00"
+    },
+    {
+      "id": "3",
+      "roomId": "room-1",
+      "title": "Sprint Planning",
+      "startTime": "2026-01-24T10:00:00",
+      "endTime": "2026-01-24T12:00:00"
+    },
+    {
+      "id": "4",
+      "roomId": "room-2",
+      "title": "Design Review",
+      "startTime": "2026-01-23T11:00:00",
+      "endTime": "2026-01-23T12:00:00"
+    },
+    {
+      "id": "5",
+      "roomId": "room-2",
+      "title": "1-on-1 Meeting",
+      "startTime": "2026-01-24T15:00:00",
+      "endTime": "2026-01-24T16:00:00"
+    },
+    {
+      "id": "6",
+      "roomId": "room-3",
+      "title": "Interview",
+      "startTime": "2026-01-23T13:00:00",
+      "endTime": "2026-01-23T14:00:00"
+    },
+    {
+      "id": "27f3",
+      "roomId": "room-1",
+      "title": "Meeting with save",
+      "startTime": "2026-01-24T11:00:00.000Z",
+      "endTime": "2026-01-24T11:30:00.000Z"
+    },
+    {
+      "id": "5b34",
+      "roomId": "room-2",
+      "title": "meeting 2",
+      "startTime": "2026-01-24T07:30:00.000Z",
+      "endTime": "2026-01-24T08:00:00.000Z"
+    }
+  ]
 }

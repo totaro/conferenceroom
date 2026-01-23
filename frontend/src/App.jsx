@@ -89,7 +89,7 @@ function App() {
     setFormErrors({})
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     // Validation
@@ -106,20 +106,45 @@ function App() {
       return
     }
 
-    // Log the data for now
+    // Prepare reservation data for backend
     const reservationData = {
-      title: formTitle.trim(),
-      name: formName.trim(),
       roomId: selectedRoom.id,
-      roomName: selectedRoom.name,
+      title: formTitle.trim(),
       startTime: selectedSlot.start.toISOString(),
       endTime: selectedSlot.end.toISOString()
     }
 
-    console.log('Reservation Data:', reservationData)
+    try {
+      // POST to JSON Server
+      const response = await fetch('http://localhost:3001/reservations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reservationData)
+      })
 
-    // Close modal and reset form
-    handleCloseModal()
+      if (!response.ok) {
+        throw new Error('Failed to create reservation')
+      }
+
+      const createdReservation = await response.json()
+      console.log('Reservation created:', createdReservation)
+
+      // Close modal and reset form
+      handleCloseModal()
+
+      // Refresh calendar to show new reservation
+      const reservationsResponse = await fetch(`http://localhost:3001/reservations?roomId=${selectedRoom.id}`)
+      const updatedReservations = await reservationsResponse.json()
+      setReservations(updatedReservations)
+
+      alert('✅ Reservation created successfully!')
+
+    } catch (error) {
+      console.error('Error creating reservation:', error)
+      alert('❌ Failed to create reservation. Please try again.')
+    }
   }
 
   return (
