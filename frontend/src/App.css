@@ -99,6 +99,21 @@ h3 {
   margin-top: 1rem;
 }
 
+.calendar-hint {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: #e3f2fd;
+  border-left: 4px solid #2196f3;
+  border-radius: 4px;
+  color: #1565c0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.calendar-hint strong {
+  color: #0d47a1;
+}
+
 /* Modal Styles */
 .modal-overlay {
   position: fixed;
@@ -136,6 +151,13 @@ h3 {
   margin: 0;
   font-size: 1.5rem;
   color: #333;
+}
+
+.modal-subtitle {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: normal;
 }
 
 .close-button {
@@ -177,6 +199,7 @@ h3 {
   color: #666;
   font-style: italic;
 }
+
 /* Form Styles */
 .form-group {
   margin-bottom: 1.25rem;
@@ -198,6 +221,11 @@ h3 {
   font-size: 1rem;
   transition: border-color 0.2s;
   box-sizing: border-box;
+}
+
+.form-group input[type="datetime-local"] {
+  font-family: inherit;
+  cursor: pointer;
 }
 
 .form-group input:focus {

@@ -22,6 +22,7 @@ function App() {
   const [formEmail, setFormEmail] = useState('')
   const [formParticipants, setFormParticipants] = useState('')
   const [formNotes, setFormNotes] = useState('')
+  const [formEndTime, setFormEndTime] = useState(null)
   const [formErrors, setFormErrors] = useState({})
 
   useEffect(() => {
@@ -80,6 +81,7 @@ function App() {
   // Handle time slot selection on calendar
   const handleSelectSlot = (slotInfo) => {
     setSelectedSlot(slotInfo)
+    setFormEndTime(slotInfo.end) // Initialize editable end time
     setIsModalOpen(true)
   }
 
@@ -92,8 +94,47 @@ function App() {
     setFormEmail('')
     setFormParticipants('')
     setFormNotes('')
+    setFormEndTime(null)
     setFormErrors({})
   }
+
+  // Clear specific errors when user changes the problematic field
+  useEffect(() => {
+    if (formErrors.endTime || formErrors.participants) {
+      const newErrors = { ...formErrors }
+
+      // Clear end time error if user changes the end time
+      if (formErrors.endTime && formEndTime && selectedSlot) {
+        const newStart = new Date(selectedSlot.start)
+        const newEnd = new Date(formEndTime)
+
+        // Check if end time is now valid (after start time)
+        if (newEnd > newStart) {
+          // Also check if it no longer overlaps
+          const hasOverlap = reservations.some(reservation => {
+            const existingStart = new Date(reservation.startTime)
+            const existingEnd = new Date(reservation.endTime)
+            return newStart < existingEnd && newEnd > existingStart
+          })
+
+          if (!hasOverlap) {
+            delete newErrors.endTime
+          }
+        }
+      }
+
+      // Clear participants error if user changes participants to valid number
+      if (formErrors.participants && formParticipants && selectedRoom) {
+        const participantCount = parseInt(formParticipants)
+        if (participantCount <= selectedRoom.capacity) {
+          delete newErrors.participants
+        }
+      }
+
+      setFormErrors(newErrors)
+    }
+  }, [formEndTime, formParticipants])
+
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -107,6 +148,42 @@ function App() {
       errors.name = 'Name is required'
     }
 
+    // Validate participants don't exceed room capacity
+    if (formParticipants && selectedRoom) {
+      const participantCount = parseInt(formParticipants)
+      if (participantCount > selectedRoom.capacity) {
+        errors.participants = `Room capacity is ${selectedRoom.capacity}. You entered ${participantCount} participants.`
+      }
+    }
+
+    // Validate end time is after start time
+    if (formEndTime && selectedSlot) {
+      const endTime = new Date(formEndTime)
+      const startTime = new Date(selectedSlot.start)
+      if (endTime <= startTime) {
+        errors.endTime = 'End time must be after start time'
+      }
+    }
+
+    // Check for overlapping reservations
+    if (selectedSlot && formEndTime) {
+      const newStart = new Date(selectedSlot.start)
+      const newEnd = new Date(formEndTime)
+
+      const hasOverlap = reservations.some(reservation => {
+        const existingStart = new Date(reservation.startTime)
+        const existingEnd = new Date(reservation.endTime)
+
+        // Check if time ranges overlap
+        // Overlap occurs if: new start is before existing end AND new end is after existing start
+        return newStart < existingEnd && newEnd > existingStart
+      })
+
+      if (hasOverlap) {
+        errors.endTime = 'This time slot overlaps with an existing reservation. Please choose a different time.'
+      }
+    }
+
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors)
       return
@@ -117,7 +194,7 @@ function App() {
       roomId: selectedRoom.id,
       title: formTitle.trim(),
       startTime: selectedSlot.start.toISOString(),
-      endTime: selectedSlot.end.toISOString(),
+      endTime: formEndTime ? new Date(formEndTime).toISOString() : selectedSlot.end.toISOString(),
       // Optional fields
       email: formEmail.trim() || undefined,
       participants: formParticipants ? parseInt(formParticipants) : undefined,
@@ -250,6 +327,9 @@ function App() {
             onSelectSlot={handleSelectSlot}
             onSelectEvent={handleDeleteReservation}
           />
+          <p className="calendar-hint">
+            💡 <strong>Tip:</strong> Click or drag across time slots to select your booking duration. You can also adjust the end time in the booking form.
+          </p>
         </div>
       )}
 
@@ -264,7 +344,12 @@ function App() {
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>Create New Reservation</h2>
+              <div>
+                <h2>Create New Reservation</h2>
+                <p className="modal-subtitle">
+                  {selectedRoom?.name} • Capacity: {selectedRoom?.capacity} people
+                </p>
+              </div>
               <button className="close-button" onClick={handleCloseModal}>
                 ×
               </button>
@@ -319,9 +404,14 @@ function App() {
                     id="participants"
                     value={formParticipants}
                     onChange={(e) => setFormParticipants(e.target.value)}
-                    placeholder="e.g., 5 (optional)"
+                    placeholder={`Max ${selectedRoom?.capacity || '?'} people (optional)`}
                     min="1"
+                    max={selectedRoom?.capacity}
+                    className={formErrors.participants ? 'error-input' : ''}
                   />
+                  {formErrors.participants && (
+                    <span className="error-message">{formErrors.participants}</span>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -357,13 +447,17 @@ function App() {
                   </div>
 
                   <div className="form-group">
-                    <label>End Time</label>
+                    <label htmlFor="endTime">End Time *</label>
                     <input
-                      type="text"
-                      value={selectedSlot?.end.toLocaleString() || ''}
-                      disabled
-                      className="disabled-input"
+                      type="datetime-local"
+                      id="endTime"
+                      value={formEndTime ? new Date(formEndTime.getTime() - formEndTime.getTimezoneOffset() * 60000).toISOString().slice(0, 16) : ''}
+                      onChange={(e) => setFormEndTime(new Date(e.target.value))}
+                      className={formErrors.endTime ? 'error-input' : ''}
                     />
+                    {formErrors.endTime && (
+                      <span className="error-message">{formErrors.endTime}</span>
+                    )}
                   </div>
                 </div>
 
