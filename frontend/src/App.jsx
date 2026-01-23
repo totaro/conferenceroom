@@ -13,6 +13,8 @@ function App() {
   const [reservations, setReservations] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedSlot, setSelectedSlot] = useState(null)
 
   useEffect(() => {
     // Fetch rooms from JSON Server
@@ -66,6 +68,17 @@ function App() {
     end: new Date(reservation.endTime),
     resource: reservation
   }))
+
+  // Handle time slot selection on calendar
+  const handleSelectSlot = (slotInfo) => {
+    setSelectedSlot(slotInfo)
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedSlot(null)
+  }
 
   return (
     <div className="app">
@@ -121,6 +134,8 @@ function App() {
             endAccessor="end"
             style={{ height: 600 }}
             defaultView="week"
+            selectable
+            onSelectSlot={handleSelectSlot}
           />
         </div>
       )}
@@ -130,6 +145,26 @@ function App() {
           <p className="success">✅ Backend connection successful!</p>
         )}
       </div>
+
+      {/* Modal Dialog */}
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Create New Reservation</h2>
+              <button className="close-button" onClick={handleCloseModal}>
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              <p><strong>Room:</strong> {selectedRoom?.name}</p>
+              <p><strong>Start:</strong> {selectedSlot?.start.toLocaleString()}</p>
+              <p><strong>End:</strong> {selectedSlot?.end.toLocaleString()}</p>
+              <p className="temp-message">Form will go here...</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
