@@ -84,6 +84,13 @@ function App() {
 
   // Handle time slot selection on calendar
   const handleSelectSlot = (slotInfo) => {
+    // Prevent booking in the past
+    const now = new Date()
+    if (slotInfo.start < now) {
+      alert("You cannot book a reservation in the past.")
+      return
+    }
+
     setSelectedSlot(slotInfo)
     setFormEndTime(slotInfo.end) // Initialize editable end time
     setIsModalOpen(true)
@@ -158,6 +165,12 @@ function App() {
       if (participantCount > selectedRoom.capacity) {
         errors.participants = `Room capacity is ${selectedRoom.capacity}. You entered ${participantCount} participants.`
       }
+    }
+
+    // Validate start time is not in the past
+    const now = new Date()
+    if (selectedSlot && new Date(selectedSlot.start) < now) {
+      errors.general = 'Cannot book a reservation in the past'
     }
 
     // Validate end time is after start time
@@ -371,6 +384,11 @@ function App() {
               </button>
             </div>
             <div className="modal-body">
+              {formErrors.general && (
+                <div className="form-global-error">
+                  ⚠️ {formErrors.general}
+                </div>
+              )}
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="title">Title *</label>

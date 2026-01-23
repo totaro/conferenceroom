@@ -352,6 +352,20 @@ h3 {
   margin-bottom: 1.5rem;
 }
 
+/* Global form error */
+.form-global-error {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--error-light);
+  border: 1px solid var(--error);
+  border-radius: var(--radius-md);
+  color: var(--error);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 /* ============================================
    BUTTON STYLES
    ============================================ */
