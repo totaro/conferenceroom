@@ -16,6 +16,10 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedSlot, setSelectedSlot] = useState(null)
 
+  // Event details modal state
+  const [selectedEvent, setSelectedEvent] = useState(null)
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+
   // Calendar state
   const [view, setView] = useState('week')
   const [date, setDate] = useState(new Date())
@@ -251,10 +255,18 @@ function App() {
     }
   }
 
-  const handleDeleteReservation = async (event) => {
+  // Open details modal when an event is clicked
+  const handleSelectEvent = (event) => {
+    setSelectedEvent(event)
+    setIsDetailsModalOpen(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!selectedEvent) return
+
     // Confirm before deleting
     const confirmDelete = window.confirm(
-      `Are you sure you want to cancel "${event.title}"?\n\nTime: ${event.start.toLocaleString()} - ${event.end.toLocaleString()}`
+      `Are you sure you want to cancel "${selectedEvent.title}"?`
     )
 
     if (!confirmDelete) {
@@ -263,7 +275,7 @@ function App() {
 
     try {
       // DELETE from JSON Server
-      const response = await fetch(`http://localhost:3001/reservations/${event.id}`, {
+      const response = await fetch(`http://localhost:3001/reservations/${selectedEvent.id}`, {
         method: 'DELETE'
       })
 
@@ -271,12 +283,16 @@ function App() {
         throw new Error('Failed to delete reservation')
       }
 
-      console.log('Reservation deleted:', event.id)
+      console.log('Reservation deleted:', selectedEvent.id)
 
       // Refresh calendar to remove deleted reservation
       const reservationsResponse = await fetch(`http://localhost:3001/reservations?roomId=${selectedRoom.id}`)
       const updatedReservations = await reservationsResponse.json()
       setReservations(updatedReservations)
+
+      // Close modal
+      setIsDetailsModalOpen(false)
+      setSelectedEvent(null)
 
       alert('✅ Reservation cancelled successfully!')
 
@@ -354,7 +370,7 @@ function App() {
             //
             selectable
             onSelectSlot={handleSelectSlot}
-            onSelectEvent={handleDeleteReservation}
+            onSelectEvent={handleSelectEvent}
           />
           <p className="calendar-hint">
             💡 <strong>Tip:</strong> Click or drag across time slots to select your booking duration. You can also adjust the end time in the booking form.
@@ -504,6 +520,86 @@ function App() {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Event Details Modal */}
+      {isDetailsModalOpen && selectedEvent && (
+        <div className="modal-overlay" onClick={() => setIsDetailsModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Reservation Details</h2>
+              <button
+                className="close-button"
+                onClick={() => setIsDetailsModalOpen(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="details-grid">
+                <div className="detail-item">
+                  <h3>Title</h3>
+                  <p>{selectedEvent.title}</p>
+                </div>
+
+                <div className="detail-item">
+                  <h3>Reserved By</h3>
+                  <p>{selectedEvent.resource.name || 'N/A'}</p>
+                </div>
+
+                <div className="detail-item">
+                  <h3>Time</h3>
+                  <p>
+                    {selectedEvent.start.toLocaleString()} - <br />
+                    {selectedEvent.end.toLocaleString()}
+                  </p>
+                </div>
+
+                <div className="detail-item">
+                  <h3>Room</h3>
+                  <p>{selectedRoom?.name}</p>
+                </div>
+
+                {selectedEvent.resource.email && (
+                  <div className="detail-item">
+                    <h3>Email</h3>
+                    <p>{selectedEvent.resource.email}</p>
+                  </div>
+                )}
+
+                {selectedEvent.resource.participants && (
+                  <div className="detail-item">
+                    <h3>Participants</h3>
+                    <p>{selectedEvent.resource.participants}</p>
+                  </div>
+                )}
+
+                {selectedEvent.resource.notes && (
+                  <div className="detail-item full-width">
+                    <h3>Notes</h3>
+                    <p style={{ whiteSpace: 'pre-wrap' }}>{selectedEvent.resource.notes}</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="form-actions" style={{ marginTop: '2rem' }}>
+                <button
+                  className="btn-cancel"
+                  onClick={() => setIsDetailsModalOpen(false)}
+                >
+                  Close
+                </button>
+                <button
+                  className="btn-submit"
+                  style={{ background: 'var(--error)', borderColor: 'var(--error)' }}
+                  onClick={handleConfirmDelete}
+                >
+                  Cancel Reservation
+                </button>
+              </div>
             </div>
           </div>
         </div>
