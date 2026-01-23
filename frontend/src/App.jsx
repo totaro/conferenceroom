@@ -10,6 +10,7 @@ const localizer = momentLocalizer(moment)
 function App() {
   const [rooms, setRooms] = useState([])
   const [selectedRoom, setSelectedRoom] = useState(null)
+  const [reservations, setReservations] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -36,11 +37,35 @@ function App() {
       })
   }, [])
 
+  // Fetch reservations whenever selected room changes
+  useEffect(() => {
+    if (!selectedRoom) return
+
+    fetch(`http://localhost:3001/reservations?roomId=${selectedRoom.id}`)
+      .then(response => response.json())
+      .then(data => {
+        setReservations(data)
+      })
+      .catch(err => {
+        console.error('Failed to fetch reservations:', err)
+        setReservations([])
+      })
+  }, [selectedRoom])
+
   const handleRoomChange = (event) => {
     const roomId = event.target.value
     const room = rooms.find(r => r.id === roomId)
     setSelectedRoom(room)
   }
+
+  // Transform reservations to calendar event format
+  const events = reservations.map(reservation => ({
+    id: reservation.id,
+    title: reservation.title,
+    start: new Date(reservation.startTime),
+    end: new Date(reservation.endTime),
+    resource: reservation
+  }))
 
   return (
     <div className="app">
@@ -91,7 +116,7 @@ function App() {
           <h2>Reservations for {selectedRoom.name}</h2>
           <Calendar
             localizer={localizer}
-            events={[]}
+            events={events}
             startAccessor="start"
             endAccessor="end"
             style={{ height: 600 }}
