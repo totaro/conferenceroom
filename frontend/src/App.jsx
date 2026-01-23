@@ -19,6 +19,9 @@ function App() {
   // Form state
   const [formTitle, setFormTitle] = useState('')
   const [formName, setFormName] = useState('')
+  const [formEmail, setFormEmail] = useState('')
+  const [formParticipants, setFormParticipants] = useState('')
+  const [formNotes, setFormNotes] = useState('')
   const [formErrors, setFormErrors] = useState({})
 
   useEffect(() => {
@@ -86,6 +89,9 @@ function App() {
     // Reset form
     setFormTitle('')
     setFormName('')
+    setFormEmail('')
+    setFormParticipants('')
+    setFormNotes('')
     setFormErrors({})
   }
 
@@ -111,7 +117,11 @@ function App() {
       roomId: selectedRoom.id,
       title: formTitle.trim(),
       startTime: selectedSlot.start.toISOString(),
-      endTime: selectedSlot.end.toISOString()
+      endTime: selectedSlot.end.toISOString(),
+      // Optional fields
+      email: formEmail.trim() || undefined,
+      participants: formParticipants ? parseInt(formParticipants) : undefined,
+      notes: formNotes.trim() || undefined
     }
 
     try {
@@ -289,6 +299,40 @@ function App() {
                   {formErrors.name && (
                     <span className="error-message">{formErrors.name}</span>
                   )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={formEmail}
+                    onChange={(e) => setFormEmail(e.target.value)}
+                    placeholder="your.email@example.com (optional)"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="participants">Number of Participants</label>
+                  <input
+                    type="number"
+                    id="participants"
+                    value={formParticipants}
+                    onChange={(e) => setFormParticipants(e.target.value)}
+                    placeholder="e.g., 5 (optional)"
+                    min="1"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="notes">Notes</label>
+                  <textarea
+                    id="notes"
+                    value={formNotes}
+                    onChange={(e) => setFormNotes(e.target.value)}
+                    placeholder="Additional information (optional)"
+                    rows="3"
+                  />
                 </div>
 
                 <div className="form-group">
