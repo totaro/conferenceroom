@@ -16,6 +16,11 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedSlot, setSelectedSlot] = useState(null)
 
+  // Form state
+  const [formTitle, setFormTitle] = useState('')
+  const [formName, setFormName] = useState('')
+  const [formErrors, setFormErrors] = useState({})
+
   useEffect(() => {
     // Fetch rooms from JSON Server
     fetch('http://localhost:3001/rooms')
@@ -78,6 +83,43 @@ function App() {
   const handleCloseModal = () => {
     setIsModalOpen(false)
     setSelectedSlot(null)
+    // Reset form
+    setFormTitle('')
+    setFormName('')
+    setFormErrors({})
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    // Validation
+    const errors = {}
+    if (!formTitle.trim()) {
+      errors.title = 'Title is required'
+    }
+    if (!formName.trim()) {
+      errors.name = 'Name is required'
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors)
+      return
+    }
+
+    // Log the data for now
+    const reservationData = {
+      title: formTitle.trim(),
+      name: formName.trim(),
+      roomId: selectedRoom.id,
+      roomName: selectedRoom.name,
+      startTime: selectedSlot.start.toISOString(),
+      endTime: selectedSlot.end.toISOString()
+    }
+
+    console.log('Reservation Data:', reservationData)
+
+    // Close modal and reset form
+    handleCloseModal()
   }
 
   return (
@@ -157,10 +199,78 @@ function App() {
               </button>
             </div>
             <div className="modal-body">
-              <p><strong>Room:</strong> {selectedRoom?.name}</p>
-              <p><strong>Start:</strong> {selectedSlot?.start.toLocaleString()}</p>
-              <p><strong>End:</strong> {selectedSlot?.end.toLocaleString()}</p>
-              <p className="temp-message">Form will go here...</p>
+              <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label htmlFor="title">Title *</label>
+                  <input
+                    type="text"
+                    id="title"
+                    value={formTitle}
+                    onChange={(e) => setFormTitle(e.target.value)}
+                    className={formErrors.title ? 'error-input' : ''}
+                    placeholder="e.g., Team Meeting"
+                  />
+                  {formErrors.title && (
+                    <span className="error-message">{formErrors.title}</span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="name">Name *</label>
+                  <input
+                    type="text"
+                    id="name"
+                    value={formName}
+                    onChange={(e) => setFormName(e.target.value)}
+                    className={formErrors.name ? 'error-input' : ''}
+                    placeholder="Your name"
+                  />
+                  {formErrors.name && (
+                    <span className="error-message">{formErrors.name}</span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label>Room</label>
+                  <input
+                    type="text"
+                    value={selectedRoom?.name || ''}
+                    disabled
+                    className="disabled-input"
+                  />
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Start Time</label>
+                    <input
+                      type="text"
+                      value={selectedSlot?.start.toLocaleString() || ''}
+                      disabled
+                      className="disabled-input"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>End Time</label>
+                    <input
+                      type="text"
+                      value={selectedSlot?.end.toLocaleString() || ''}
+                      disabled
+                      className="disabled-input"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-actions">
+                  <button type="button" className="btn-cancel" onClick={handleCloseModal}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn-submit">
+                    Book Room
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
