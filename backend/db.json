@@ -84,21 +84,15 @@
       "notes": "yleistä kokous infoa"
     },
     {
-      "id": "bdcc",
       "roomId": "room-1",
-      "title": "lalala",
+      "title": "lalala3434xxx",
+      "name": "alan",
       "startTime": "2026-01-24T01:00:00.000Z",
       "endTime": "2026-01-24T03:05:00.000Z",
       "email": "lala@gmail.com",
-      "participants": 2,
-      "notes": "ux fix"
-    },
-    {
-      "id": "2fc2",
-      "roomId": "room-1",
-      "title": "jaja",
-      "startTime": "2026-01-23T23:00:00.000Z",
-      "endTime": "2026-01-24T00:32:00.000Z"
+      "participants": 9,
+      "notes": "ux fix 7",
+      "id": "bdcc"
     }
   ]
 }

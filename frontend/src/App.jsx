@@ -15,6 +15,7 @@ function App() {
   const [error, setError] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedSlot, setSelectedSlot] = useState(null)
+  const [isEditing, setIsEditing] = useState(false)
 
   // Event details modal state
   const [selectedEvent, setSelectedEvent] = useState(null)
@@ -111,6 +112,7 @@ function App() {
     setFormNotes('')
     setFormEndTime(null)
     setFormErrors({})
+    setIsEditing(false)
   }
 
   // Clear specific errors when user changes the problematic field
@@ -127,6 +129,11 @@ function App() {
         if (newEnd > newStart) {
           // Also check if it no longer overlaps
           const hasOverlap = reservations.some(reservation => {
+            // Skip self if editing
+            if (isEditing && selectedEvent && reservation.id === selectedEvent.id) {
+              return false
+            }
+
             const existingStart = new Date(reservation.startTime)
             const existingEnd = new Date(reservation.endTime)
             return newStart < existingEnd && newEnd > existingStart
@@ -192,6 +199,11 @@ function App() {
       const newEnd = new Date(formEndTime)
 
       const hasOverlap = reservations.some(reservation => {
+        // Skip self if editing
+        if (isEditing && selectedEvent && reservation.id === selectedEvent.id) {
+          return false
+        }
+
         const existingStart = new Date(reservation.startTime)
         const existingEnd = new Date(reservation.endTime)
 
@@ -214,6 +226,7 @@ function App() {
     const reservationData = {
       roomId: selectedRoom.id,
       title: formTitle.trim(),
+      name: formName.trim(),
       startTime: selectedSlot.start.toISOString(),
       endTime: formEndTime ? new Date(formEndTime).toISOString() : selectedSlot.end.toISOString(),
       // Optional fields
@@ -223,9 +236,15 @@ function App() {
     }
 
     try {
-      // POST to JSON Server
-      const response = await fetch('http://localhost:3001/reservations', {
-        method: 'POST',
+      // Determine method and URL based on edit mode
+      const url = isEditing
+        ? `http://localhost:3001/reservations/${selectedEvent.id}`
+        : 'http://localhost:3001/reservations'
+
+      const method = isEditing ? 'PUT' : 'POST'
+
+      const response = await fetch(url, {
+        method: method,
         headers: {
           'Content-Type': 'application/json'
         },
@@ -233,26 +252,52 @@ function App() {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to create reservation')
+        throw new Error(`Failed to ${isEditing ? 'update' : 'create'} reservation`)
       }
 
-      const createdReservation = await response.json()
-      console.log('Reservation created:', createdReservation)
+      const savedReservation = await response.json()
+      console.log(`Reservation ${isEditing ? 'updated' : 'created'}:`, savedReservation)
 
       // Close modal and reset form
       handleCloseModal()
 
-      // Refresh calendar to show new reservation
+      // Refresh calendar
       const reservationsResponse = await fetch(`http://localhost:3001/reservations?roomId=${selectedRoom.id}`)
       const updatedReservations = await reservationsResponse.json()
       setReservations(updatedReservations)
 
-      alert('✅ Reservation created successfully!')
+      alert(`✅ Reservation ${isEditing ? 'updated' : 'created'} successfully!`)
 
     } catch (error) {
-      console.error('Error creating reservation:', error)
-      alert('❌ Failed to create reservation. Please try again.')
+      console.error(`Error ${isEditing ? 'updating' : 'creating'} reservation:`, error)
+      alert(`❌ Failed to ${isEditing ? 'update' : 'create'} reservation. Please try again.`)
     }
+  }
+
+  // Open form in edit mode
+  const handleEditEvent = () => {
+    if (!selectedEvent) return
+
+    // Pre-fill form
+    setFormTitle(selectedEvent.title)
+    setFormName(selectedEvent.resource.name || '')
+    setFormEmail(selectedEvent.resource.email || '')
+    setFormParticipants(selectedEvent.resource.participants || '')
+    setFormNotes(selectedEvent.resource.notes || '')
+
+    // Set time slots
+    const start = new Date(selectedEvent.start)
+    const end = new Date(selectedEvent.end)
+
+    setSelectedSlot({
+      start: start,
+      end: end
+    })
+    setFormEndTime(end)
+
+    setIsEditing(true)
+    setIsDetailsModalOpen(false) // Close details
+    setIsModalOpen(true) // Open form
   }
 
   // Open details modal when an event is clicked
@@ -390,7 +435,7 @@ function App() {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <div>
-                <h2>Create New Reservation</h2>
+                <h2>{isEditing ? 'Edit Reservation' : 'Create New Reservation'}</h2>
                 <p className="modal-subtitle">
                   {selectedRoom?.name} • Capacity: {selectedRoom?.capacity} people
                 </p>
@@ -516,7 +561,7 @@ function App() {
                     Cancel
                   </button>
                   <button type="submit" className="btn-submit">
-                    Book Room
+                    {isEditing ? 'Update Reservation' : 'Book Room'}
                   </button>
                 </div>
               </form>
@@ -586,6 +631,13 @@ function App() {
               </div>
 
               <div className="form-actions" style={{ marginTop: '2rem' }}>
+                <button
+                  className="btn-cancel"
+                  onClick={handleEditEvent}
+                  style={{ marginRight: 'auto', borderColor: 'var(--primary-blue)', color: 'var(--primary-blue)' }}
+                >
+                  Edit
+                </button>
                 <button
                   className="btn-cancel"
                   onClick={() => setIsDetailsModalOpen(false)}
