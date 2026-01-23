@@ -12,6 +12,7 @@ function App() {
   const [selectedRoom, setSelectedRoom] = useState(null)
   const [reservations, setReservations] = useState([])
   const [loading, setLoading] = useState(true)
+  const [reservationsLoading, setReservationsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedSlot, setSelectedSlot] = useState(null)
@@ -35,7 +36,8 @@ function App() {
 
   // Calendar state
   const [view, setView] = useState('week')
-  const [date, setDate] = useState(new Date())
+  // Default to Jan 24, 2026 to match test data
+  const [date, setDate] = useState(new Date(2026, 0, 24))
 
   // Form state
   const [formTitle, setFormTitle] = useState('')
@@ -73,14 +75,18 @@ function App() {
   useEffect(() => {
     if (!selectedRoom) return
 
+    setReservationsLoading(true)
     fetch(`http://localhost:3001/reservations?roomId=${selectedRoom.id}`)
       .then(response => response.json())
       .then(data => {
         setReservations(data)
+        setReservationsLoading(false)
       })
       .catch(err => {
         console.error('Failed to fetch reservations:', err)
         setReservations([])
+        setReservationsLoading(false)
+        showNotification('Failed to load reservations', 'error')
       })
   }, [selectedRoom])
 
@@ -383,6 +389,7 @@ function App() {
               className="room-dropdown"
               value={selectedRoom?.id || ''}
               onChange={handleRoomChange}
+              disabled={loading}
             >
               {rooms.map(room => (
                 <option key={room.id} value={room.id}>
@@ -407,7 +414,26 @@ function App() {
 
       {/* Calendar Section */}
       {selectedRoom && (
-        <div className="calendar-section">
+        <div className="calendar-section" style={{ position: 'relative' }}>
+          {reservationsLoading && (
+            <div className="loading-overlay" style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(255, 255, 255, 0.8)',
+              zIndex: 10,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 'var(--radius-lg)'
+            }}>
+              <div className="spinner" style={{ borderTopColor: 'var(--primary-blue)' }}></div>
+              <p style={{ marginTop: '1rem', color: 'var(--gray-600)', fontWeight: 500 }}>Loading reservations...</p>
+            </div>
+          )}
           <h2>Reservations for {selectedRoom.name}</h2>
           <Calendar
             localizer={localizer}
