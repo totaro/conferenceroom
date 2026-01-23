@@ -7,6 +7,7 @@
 h1 {
   color: #333;
   margin-bottom: 2rem;
+  text-align: center;
 }
 
 h2 {
@@ -15,37 +16,61 @@ h2 {
   margin-bottom: 1rem;
 }
 
-.rooms-section {
+h3 {
+  color: #666;
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.room-selector-section {
   background: #f9f9f9;
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
 }
 
-.rooms-list {
-  list-style: none;
-  padding: 0;
+.room-dropdown {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
 }
 
-.room-item {
+.room-dropdown:hover {
+  border-color: #999;
+}
+
+.room-dropdown:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.selected-room-info {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
   background: white;
-  padding: 1rem;
-  margin-bottom: 0.75rem;
   border-radius: 6px;
   border: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
-.room-item strong {
-  font-size: 1.1rem;
+.room-details {
+  margin-top: 0.5rem;
+}
+
+.room-details p {
+  margin: 0.5rem 0;
+  color: #555;
+  font-size: 1rem;
+}
+
+.room-details strong {
   color: #333;
-}
-
-.capacity {
-  color: #666;
-  font-size: 0.9rem;
+  margin-right: 0.5rem;
 }
 
 .error {

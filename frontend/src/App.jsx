@@ -3,6 +3,7 @@ import './App.css'
 
 function App() {
   const [rooms, setRooms] = useState([])
+  const [selectedRoom, setSelectedRoom] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -17,6 +18,10 @@ function App() {
       })
       .then(data => {
         setRooms(data)
+        // Auto-select the first room when data loads
+        if (data.length > 0) {
+          setSelectedRoom(data[0])
+        }
         setLoading(false)
       })
       .catch(err => {
@@ -25,12 +30,18 @@ function App() {
       })
   }, [])
 
+  const handleRoomChange = (event) => {
+    const roomId = event.target.value
+    const room = rooms.find(r => r.id === roomId)
+    setSelectedRoom(room)
+  }
+
   return (
     <div className="app">
       <h1>Room Reservation System</h1>
 
-      <div className="rooms-section">
-        <h2>Available Rooms</h2>
+      <div className="room-selector-section">
+        <h2>Select a Room</h2>
 
         {loading && <p>Loading rooms...</p>}
 
@@ -41,14 +52,30 @@ function App() {
         )}
 
         {!loading && !error && rooms.length > 0 && (
-          <ul className="rooms-list">
-            {rooms.map(room => (
-              <li key={room.id} className="room-item">
-                <strong>{room.name}</strong>
-                <span className="capacity">Capacity: {room.capacity} people</span>
-              </li>
-            ))}
-          </ul>
+          <>
+            <select
+              className="room-dropdown"
+              value={selectedRoom?.id || ''}
+              onChange={handleRoomChange}
+            >
+              {rooms.map(room => (
+                <option key={room.id} value={room.id}>
+                  {room.name} (Capacity: {room.capacity})
+                </option>
+              ))}
+            </select>
+
+            {selectedRoom && (
+              <div className="selected-room-info">
+                <h3>Currently Selected:</h3>
+                <div className="room-details">
+                  <p><strong>Room:</strong> {selectedRoom.name}</p>
+                  <p><strong>Capacity:</strong> {selectedRoom.capacity} people</p>
+                  <p><strong>Room ID:</strong> {selectedRoom.id}</p>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -62,4 +89,3 @@ function App() {
 }
 
 export default App
-
