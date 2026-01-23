@@ -16,6 +16,10 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedSlot, setSelectedSlot] = useState(null)
 
+  // Calendar state
+  const [view, setView] = useState('week')
+  const [date, setDate] = useState(new Date())
+
   // Form state
   const [formTitle, setFormTitle] = useState('')
   const [formName, setFormName] = useState('')
@@ -326,9 +330,15 @@ function App() {
             events={events}
             startAccessor="start"
             endAccessor="end"
+
             style={{ height: 600 }}
             className="rbc-calendar"
-            defaultView="week"
+            // Controlled props
+            view={view}
+            date={date}
+            onView={(newView) => setView(newView)}
+            onNavigate={(newDate) => setDate(newDate)}
+            //
             selectable
             onSelectSlot={handleSelectSlot}
             onSelectEvent={handleDeleteReservation}
