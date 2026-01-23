@@ -276,7 +276,12 @@ function App() {
       <div className="room-selector-section">
         <h2>Select a Room</h2>
 
-        {loading && <p>Loading rooms...</p>}
+        {loading && (
+          <div className="loading">
+            <div className="spinner"></div>
+            <p>Loading rooms...</p>
+          </div>
+        )}
 
         {error && <p className="error">Error: {error}</p>}
 
@@ -322,6 +327,7 @@ function App() {
             startAccessor="start"
             endAccessor="end"
             style={{ height: 600 }}
+            className="rbc-calendar"
             defaultView="week"
             selectable
             onSelectSlot={handleSelectSlot}

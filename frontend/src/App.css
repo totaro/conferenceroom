@@ -1,328 +1,577 @@
+/* ============================================
+   MAIN APP CONTAINER
+   ============================================ */
+
 .app {
-  max-width: 800px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  animation: fadeIn 0.4s ease-in;
 }
 
 h1 {
-  color: #333;
-  margin-bottom: 2rem;
+  color: var(--gray-900);
+  margin-bottom: 2.5rem;
   text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  letter-spacing: -0.025em;
 }
 
 h2 {
-  color: #555;
+  color: var(--gray-800);
   font-size: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  font-weight: 600;
 }
 
 h3 {
-  color: #666;
-  font-size: 1.2rem;
-  margin-bottom: 0.75rem;
+  color: var(--gray-700);
+  font-size: 1.125rem;
+  margin-bottom: 0.875rem;
+  font-weight: 600;
 }
 
+/* ============================================
+   ROOM SELECTOR SECTION
+   ============================================ */
+
 .room-selector-section {
-  background: #f9f9f9;
-  padding: 1.5rem;
-  border-radius: 8px;
+  background: white;
+  padding: 2rem;
+  border-radius: var(--radius-xl);
   margin-bottom: 2rem;
+  box-shadow: var(--shadow-lg);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.room-selector-section:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
 }
 
 .room-dropdown {
   width: 100%;
-  padding: 0.75rem;
+  padding: 1rem 1.25rem;
   font-size: 1rem;
-  border: 2px solid #ddd;
-  border-radius: 6px;
+  border: 2px solid var(--gray-300);
+  border-radius: var(--radius-lg);
   background: white;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: all var(--transition-base);
+  font-weight: 500;
+  color: var(--gray-700);
 }
 
 .room-dropdown:hover {
-  border-color: #999;
+  border-color: var(--gray-400);
+  background: var(--gray-50);
 }
 
 .room-dropdown:focus {
   outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .selected-room-info {
   margin-top: 1.5rem;
-  padding: 1.25rem;
-  background: white;
-  border-radius: 6px;
-  border: 1px solid #e0e0e0;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--gray-200);
+  transition: all var(--transition-base);
+}
+
+.selected-room-info:hover {
+  border-color: var(--primary-blue-lighter);
 }
 
 .room-details {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .room-details p {
-  margin: 0.5rem 0;
-  color: #555;
+  margin: 0.625rem 0;
+  color: var(--gray-600);
   font-size: 1rem;
+  line-height: 1.6;
 }
 
 .room-details strong {
-  color: #333;
+  color: var(--gray-800);
   margin-right: 0.5rem;
+  font-weight: 600;
 }
+
+/* ============================================
+   CALENDAR SECTION
+   ============================================ */
 
 .calendar-section {
-  background: #f9f9f9;
-  padding: 1.5rem;
-  border-radius: 8px;
+  background: white;
+  padding: 2rem;
+  border-radius: var(--radius-xl);
   margin-bottom: 2rem;
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-base);
 }
 
-.error {
-  color: #d32f2f;
-  background: #ffebee;
-  padding: 1rem;
-  border-radius: 4px;
-}
-
-.success {
-  color: #2e7d32;
-  background: #e8f5e9;
-  padding: 0.75rem;
-  border-radius: 4px;
-  text-align: center;
-}
-
-.connection-status {
-  margin-top: 1rem;
+.calendar-section:hover {
+  box-shadow: var(--shadow-xl);
 }
 
 .calendar-hint {
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  background: #e3f2fd;
-  border-left: 4px solid #2196f3;
-  border-radius: 4px;
-  color: #1565c0;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, var(--info-light) 0%, #e0f2fe 100%);
+  border-left: 4px solid var(--primary-blue);
+  border-radius: var(--radius-md);
+  color: var(--primary-blue-dark);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  box-shadow: var(--shadow-sm);
 }
 
 .calendar-hint strong {
-  color: #0d47a1;
+  color: var(--primary-blue-dark);
+  font-weight: 600;
 }
 
-/* Modal Styles */
+/* ============================================
+   STATUS MESSAGES
+   ============================================ */
+
+.error {
+  color: var(--error);
+  background: linear-gradient(135deg, var(--error-light) 0%, #fef2f2 100%);
+  padding: 1.25rem;
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--error);
+  box-shadow: var(--shadow-sm);
+  font-weight: 500;
+}
+
+.success {
+  color: var(--success);
+  background: linear-gradient(135deg, var(--success-light) 0%, #f0fdf4 100%);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  border: 2px solid var(--success);
+  box-shadow: var(--shadow-md);
+  font-weight: 600;
+  animation: slideIn 0.4s ease-out;
+}
+
+.connection-status {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+/* ============================================
+   MODAL STYLES
+   ============================================ */
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  animation: fadeIn 0.2s ease-in;
 }
 
 .modal-content {
   background: white;
-  border-radius: 8px;
-  padding: 0;
-  max-width: 500px;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  max-width: 600px;
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  animation: slideIn 0.3s ease-out;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  border-bottom: 1px solid #e0e0e0;
+  align-items: flex-start;
+  padding: 2rem 2rem 1.5rem;
+  border-bottom: 2px solid var(--gray-100);
+  background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
 .modal-header h2 {
   margin: 0;
-  font-size: 1.5rem;
-  color: #333;
+  font-size: 1.75rem;
+  color: var(--gray-900);
+  font-weight: 700;
 }
 
 .modal-subtitle {
-  margin: 0.5rem 0 0 0;
-  font-size: 0.9rem;
-  color: #666;
-  font-weight: normal;
+  margin: 0.625rem 0 0 0;
+  font-size: 0.9375rem;
+  color: var(--gray-600);
+  font-weight: 500;
 }
 
 .close-button {
   background: none;
   border: none;
   font-size: 2rem;
-  color: #666;
+  color: var(--gray-500);
   cursor: pointer;
   padding: 0;
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  transition: background-color 0.2s;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  line-height: 1;
 }
 
 .close-button:hover {
-  background-color: #f5f5f5;
-  color: #333;
+  background: var(--gray-100);
+  color: var(--gray-700);
+}
+
+.close-button:active {
+  background: var(--gray-200);
 }
 
 .modal-body {
-  padding: 1.5rem;
+  padding: 2rem;
 }
 
-.modal-body p {
-  margin: 0.75rem 0;
-  color: #555;
-}
+/* ============================================
+   FORM STYLES
+   ============================================ */
 
-.modal-body .temp-message {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background: #f0f0f0;
-  border-radius: 4px;
-  text-align: center;
-  color: #666;
-  font-style: italic;
-}
-
-/* Form Styles */
 .form-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #333;
-  font-size: 0.95rem;
+  margin-bottom: 0.625rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  font-size: 0.9375rem;
 }
 
-.form-group input {
+.form-group input,
+.form-group textarea {
   width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #ddd;
-  border-radius: 4px;
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--gray-300);
+  border-radius: var(--radius-lg);
   font-size: 1rem;
-  transition: border-color 0.2s;
+  transition: all var(--transition-base);
   box-sizing: border-box;
+  font-family: inherit;
+  color: var(--gray-800);
+}
+
+.form-group input:hover,
+.form-group textarea:hover {
+  border-color: var(--gray-400);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .form-group input[type="datetime-local"] {
-  font-family: inherit;
   cursor: pointer;
+  font-weight: 500;
 }
 
-.form-group input:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+.form-group input.error-input,
+.form-group textarea.error-input {
+  border-color: var(--error);
+  background: var(--error-light);
 }
 
-.form-group input.error-input {
-  border-color: #d32f2f;
-}
-
-.form-group input.error-input:focus {
-  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
-}
-
-.form-group input.disabled-input {
-  background-color: #f5f5f5;
-  color: #666;
-  cursor: not-allowed;
+.form-group input.error-input:focus,
+.form-group textarea.error-input:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
 .error-message {
   display: block;
-  color: #d32f2f;
-  font-size: 0.85rem;
-  margin-top: 0.25rem;
+  color: var(--error);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
 }
 
+.form-group input.disabled-input {
+  background: var(--gray-100);
+  cursor: not-allowed;
+  color: var(--gray-600);
+  font-weight: 500;
+}
+
+.form-group input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.form-group input[type="number"]::-webkit-outer-spin-button,
+.form-group input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+  line-height: 1.6;
+}
+
+/* Form row for side-by-side fields */
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
+
+/* ============================================
+   BUTTON STYLES
+   ============================================ */
 
 .form-actions {
   display: flex;
+  gap: 1rem;
   justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 2px solid var(--gray-100);
 }
 
 .btn-cancel,
 .btn-submit {
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  padding: 0.875rem 2rem;
+  border-radius: var(--radius-lg);
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-base);
   border: none;
+  font-family: inherit;
 }
 
 .btn-cancel {
-  background-color: #f5f5f5;
-  color: #666;
+  background: white;
+  color: var(--gray-700);
+  border: 2px solid var(--gray-300);
 }
 
 .btn-cancel:hover {
-  background-color: #e0e0e0;
-  color: #333;
+  background: var(--gray-50);
+  border-color: var(--gray-400);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-cancel:active {
+  transform: translateY(0);
 }
 
 .btn-submit {
-  background-color: #4CAF50;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
   color: white;
+  box-shadow: var(--shadow-md);
 }
 
 .btn-submit:hover {
-  background-color: #45a049;
+  background: linear-gradient(135deg, var(--primary-blue-dark) 0%, #1e40af 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .btn-submit:active {
-  transform: scale(0.98);
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
-/* Textarea Styles */
-.form-group textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-family: inherit;
-  resize: vertical;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+  .app {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Responsive calendar height for tablet */
+  .calendar-section .rbc-calendar {
+    height: 450px !important;
+  }
+
+  .room-selector-section,
+  .calendar-section {
+    padding: 1.5rem;
+  }
+
+  /* Touch-friendly dropdown */
+  .room-dropdown {
+    padding: 1.125rem 1.25rem;
+    font-size: 1.0625rem;
+    min-height: 48px;
+  }
+
+  /* Scrollable modal for tablet */
+  .modal-content {
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-header,
+  .modal-body {
+    padding: 1.5rem;
+  }
+
+  /* Touch-friendly form inputs */
+  .form-group input,
+  .form-group textarea {
+    padding: 1rem 1.125rem;
+    font-size: 1rem;
+    min-height: 48px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  /* Touch-friendly buttons */
+  .btn-cancel,
+  .btn-submit {
+    width: 100%;
+    padding: 1rem 2rem;
+    min-height: 48px;
+    font-size: 1.0625rem;
+  }
 }
 
-.form-group textarea:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+@media (max-width: 480px) {
+  .app {
+    padding: 0.75rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  /* Smaller calendar for mobile screens */
+  .calendar-section .rbc-calendar {
+    height: 400px !important;
+  }
+
+  .room-selector-section,
+  .calendar-section {
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Extra touch-friendly dropdown on small screens */
+  .room-dropdown {
+    padding: 1.25rem 1rem;
+    font-size: 1rem;
+    min-height: 52px;
+  }
+
+  /* Modal takes most of screen on mobile */
+  .modal-content {
+    width: 98%;
+    max-height: 95vh;
+    border-radius: var(--radius-lg);
+  }
+
+  .modal-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .modal-body {
+    padding: 1.25rem 1rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.5rem;
+  }
+
+  /* Extra padding for touch on small screens */
+  .form-group input,
+  .form-group textarea {
+    padding: 1.125rem 1rem;
+    font-size: 1rem;
+    min-height: 52px;
+  }
+
+  .form-group textarea {
+    min-height: 120px;
+  }
+
+  .calendar-hint {
+    font-size: 0.875rem;
+    padding: 0.875rem 1rem;
+  }
+
+  /* Larger touch targets for mobile */
+  .btn-cancel,
+  .btn-submit {
+    padding: 1.125rem 1.5rem;
+    min-height: 52px;
+    font-size: 1rem;
+  }
+
+  .close-button {
+    width: 3rem;
+    height: 3rem;
+    font-size: 2.25rem;
+  }
 }
 
-.form-group input[type="number"] {
-  width: 100%;
+/* ============================================
+   LOADING STATE
+   ============================================ */
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--gray-700);
+}
+
+.loading .spinner {
+  margin-bottom: 1rem;
 }
