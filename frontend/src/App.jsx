@@ -4,7 +4,10 @@ import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import './App.css'
 
+import 'moment/locale/en-gb'
+
 // Setup the localizer for react-big-calendar
+moment.locale('en-gb')
 const localizer = momentLocalizer(moment)
 
 function App() {
@@ -437,6 +440,7 @@ function App() {
           <h2>Reservations for {selectedRoom.name}</h2>
           <Calendar
             localizer={localizer}
+            culture="en-gb"
             events={events}
             startAccessor="start"
             endAccessor="end"
@@ -452,6 +456,19 @@ function App() {
             selectable
             onSelectSlot={handleSelectSlot}
             onSelectEvent={handleSelectEvent}
+            formats={{
+              timeGutterFormat: 'HH:mm',
+              eventTimeRangeFormat: ({ start, end }, culture, local) =>
+                local.format(start, 'HH:mm', culture) + ' - ' +
+                local.format(end, 'HH:mm', culture),
+              agendaTimeRangeFormat: ({ start, end }, culture, local) =>
+                local.format(start, 'HH:mm', culture) + ' - ' +
+                local.format(end, 'HH:mm', culture),
+              dayHeaderFormat: 'dddd DD/MM',
+              dayRangeHeaderFormat: ({ start, end }, culture, local) =>
+                local.format(start, 'DD/MM/YYYY', culture) + ' - ' +
+                local.format(end, 'DD/MM/YYYY', culture),
+            }}
           />
           <p className="calendar-hint">
             💡 <strong>Tip:</strong> Click or drag across time slots to select your booking duration. You can also adjust the end time in the booking form.
@@ -571,7 +588,7 @@ function App() {
                     <label>Start Time</label>
                     <input
                       type="text"
-                      value={selectedSlot?.start.toLocaleString() || ''}
+                      value={selectedSlot ? moment(selectedSlot.start).format('DD/MM/YYYY HH:mm') : ''}
                       disabled
                       className="disabled-input"
                     />
@@ -634,8 +651,8 @@ function App() {
                 <div className="detail-item">
                   <h3>Time</h3>
                   <p>
-                    {selectedEvent.start.toLocaleString()} - <br />
-                    {selectedEvent.end.toLocaleString()}
+                    {moment(selectedEvent.start).format('DD/MM/YYYY HH:mm')} - <br />
+                    {moment(selectedEvent.end).format('HH:mm')}
                   </p>
                 </div>
 
