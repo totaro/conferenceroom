@@ -2,17 +2,17 @@
   "rooms": [
     {
       "id": "room-1",
-      "name": "Conference Room 1",
+      "name": "Atlantis (Conference Room 1)",
       "capacity": 10
     },
     {
       "id": "room-2",
-      "name": "Conference Room 2",
+      "name": "El Dorado (Conference Room 2)",
       "capacity": 6
     },
     {
       "id": "room-3",
-      "name": "Conference Room 3",
+      "name": "Shangri-La (Conference Room 3)",
       "capacity": 4
     }
   ],
