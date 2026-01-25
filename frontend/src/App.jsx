@@ -39,8 +39,8 @@ function App() {
 
   // Calendar state
   const [view, setView] = useState('week')
-  // Default to Jan 24, 2026 to match test data
-  const [date, setDate] = useState(new Date(2026, 0, 24))
+  // Default to today
+  const [date, setDate] = useState(new Date())
 
   // Form state
   const [formTitle, setFormTitle] = useState('')

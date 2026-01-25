@@ -2419,15 +2419,13 @@ Replaced `window.confirm` with an in-app modal.
     - **Visual:** Shows a spinner overlay on the calendar when switching rooms.
     - **UX:** Prevents stale data from being mistaken for the current room's data.
 
-#### 📅 Test Data Alignment
-**Issue:** "My meetings vanished!"
-**Cause:** `db.json` contains test data for **Jan 2026**, but the calendar defaulted to **Today** (e.g., 2024/2025). The calendar was working, just looking at the wrong year!
-**Fix:** Explicitly initialized the calendar state to match the test data range.
+#### 📅 Date Initialization
+**Note:** During development, we hardcoded the date to Jan 2026 to match test data. For the final version, we reverted this to `new Date()` so the calendar opens to the current day.
 
 ```javascript
 /* App.jsx */
-// Default to Jan 24, 2026 explicitly to match db.json data
-const [date, setDate] = useState(new Date(2026, 0, 24))
+// Default to Today
+const [date, setDate] = useState(new Date())
 ```
 
 ---

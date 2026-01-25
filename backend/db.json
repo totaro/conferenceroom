@@ -74,17 +74,6 @@
       "endTime": "2026-01-24T09:30:00.000Z"
     },
     {
-      "roomId": "room-1",
-      "title": "lalala3434xxx",
-      "name": "alan",
-      "startTime": "2026-01-24T01:00:00.000Z",
-      "endTime": "2026-01-24T03:05:00.000Z",
-      "email": "lala@gmail.com",
-      "participants": 9,
-      "notes": "ux fix 7",
-      "id": "bdcc"
-    },
-    {
       "id": "479d",
       "roomId": "room-1",
       "title": "tetete",
