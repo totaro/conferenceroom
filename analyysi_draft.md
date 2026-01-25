@@ -1,6 +1,24 @@
 # ANALYYSI
 
-# Tehtävänä oli toteuttaa yksinkertainen kokoushuoneiden varausrajapinta (API). 
+### 1. Tehtävänanto
+### 2. Työnkulku
+### 3. Työkalut ja toteutus
+### 4. Katselmointi
+### - 4.1. 1: Mitä tekoäly teki hyvin
+### - 4.2. 2: Mitä tekoäly teki hyvin
+### - 4.3. 3: Mitkä olivat tärkeimmät parannukset, jotka teit tekoälyn tuottamaan koodiin ja miksi?
+### 5. Kuvakaappaukset MVP-versiosta parannusten/korjausten jälkeen
+### 6. MVP:stä moderniin sovellukseen
+### 7. Kuvakaappaukset modernista versiosta
+### 8. Loppuraportti
+### 9. Sovelluksen ajaminen
+
+
+
+
+# 1. Tehtävänanto 
+
+Tehtävänä oli toteuttaa yksinkertainen kokoushuoneiden varausrajapinta (API).
 
 ## Palvelun tulee tarjota käyttäjille seuraavat toiminnot: 
 - Varauksen luonti: Varaa huone tietylle aikavälille. 
@@ -24,7 +42,7 @@ informaatiota. Koska käytettävissä ei ole “asiakasta” jolta kysyä lisät
 läpiviemiseksi saat tehdä itse oletuksia, kunhan dokumentoit tekemäsi oletukset. 
 
 
-## Työnkulku 
+# 2. Työnkulku 
 
 ## Vaihe 1: Tekoäly parikoodaajana 
 Käytä valitsemaasi tekoälytyökalua API:n toteutuksen luomiseen. Voit iteroida tekoälyn kanssa 
@@ -53,6 +71,7 @@ monta committia kuin on tarpeen.
 Commit-viestit: Käytä selkeitä viestejä, jotka kuvaavat tehdyn korjauksen (esim. ”refaktorointi: 
 Toiminnallisuus X eriytetty omaan moduuliinsa” tai ”korjaus: Lisätty validointi XYZZY-arvoille”). 
 Commit-viestit tulee kirjoittaa suomeksi. 
+
 ## Vaihe 3: Analyysi 
 
 Luo tiedosto nimeltä ANALYYSI.md. Vastaa siinä seuraaviin kysymyksiin suomeksi: 
@@ -61,7 +80,7 @@ Luo tiedosto nimeltä ANALYYSI.md. Vastaa siinä seuraaviin kysymyksiin suomeksi
 2. Mitä tekoäly teki huonosti? 
 3. Mitkä olivat tärkeimmät parannukset, jotka teit tekoälyn tuottamaan koodiin ja miksi? 
 
-# Työkalut ja toteutus (Vaihe 1)
+# 3. Työkalut ja toteutus (Vaihe 1: Tekoäly parikoodaajana)
 
 Alkuräisen sovelluksen tavoitteena oli toteuttaa yksinkertainen kokoushuoneiden varausrajapinta (API). Tämän tein MVP (minimum viable product) -periaatteella, eli pyrin saamaan toimivan perusversion mahdollisimman nopeasti. 
 
@@ -119,28 +138,26 @@ Toiminta
 - Sivun latautuessa hae ja näytä varaukset
 - Lomakkeen lähetyksessä luo varaus ja päivitä lista
 - Poistettaessa varaus, poista se ja päivitä lista
--  Näytä validointivirheet pelkkänä tekstinä
+- Näytä validointivirheet pelkkänä tekstinä
 
 Tuotos
 
 - Toimiva MVP, joka demonstroi vain ydintoiminnallisuuden
 - Ei ylimääräisiä ominaisuuksia tai optimointeja
 
-
-
 Alkuperäisen sovelluksen toteutin käyttämällä seuraavia työkaluja:
 
 -   ChatGPT: Co-pilot promptien luomiseen
 -   Antigravity: Koodin luomiseen ja refaktorointiin (Gemini 3 Pro High)
 
-# Katselmointi
+# 4. Katselmointi
 
 Katselmoinnin apuna sekä koodianalyysissä käytin Claude AI:ta (Sonnet 4.5).
 
-# 1. Mitä tekoäly teki hyvin? 
+# 4.1. Mitä tekoäly teki hyvin? 
 
 ## Yleiskatsaus
-Tämä dokumentti analysoi AI:n generoimaa koodia huonevaraussovellukselle. Käymme läpi, missä AI onnistui hyvin ja mitä tämä kertoo nykyisistä AI-koodigeneroinnin kyvyistä.
+Tämä osio analysoi AI:n generoimaa koodia huonevaraussovellukselle. TTässä käymme läpi, missä AI onnistui hyvin ja mitä tämä kertoo nykyisistä AI-koodigeneroinnin kyvyistä.
 
 ---
 
@@ -359,7 +376,7 @@ Se, että pystyimme tunnistamaan tiettyjä, korjattavissa olevia ongelmia (eikä
 
 
 
-# 2. Mitä tekoäly teki huonosti? 
+# 4.2. Mitä tekoäly teki huonosti? 
 
 
 ## Yleiskatsaus
@@ -460,32 +477,14 @@ Tämä osio analysoi huonevaraussovellusta ja käy läpi ongelmat logiikassa, ko
 
 ## Suositellut Korjaukset
 
-### 1. Lisää validointi varauskestolle
-
-### 2. Korjaa tiedostorakenteen ongelma
-
-
-### 3. Paranna virheiden käsittelyä frontendissä
-
-
-
-### 4. Käytä tapahtumien delegointia inline onclick:in sijaan
-
-
-
-### 5. Lisää perussyötteen validointi
-
-
-
-### 6. Lisää pyyntöjen lokituksen middleware
-
-
-
-### 7. Lisää ympäristökonfiguraatio
-
-
-
-### 8. Käsittele kilpailutilanne mutexilla tai transaktiolla
+ 1. Lisää validointi varauskestolle
+ 2. Korjaa tiedostorakenteen ongelma
+ 3. Paranna virheiden käsittelyä frontendissä
+ 4. Käytä tapahtumien delegointia inline onclick:in sijaan
+ 5. Lisää perussyötteen validointi
+ 6. Lisää pyyntöjen lokituksen middleware
+ 7. Lisää ympäristökonfiguraatio
+ 
 
 
 
@@ -529,20 +528,39 @@ Vaikka sovellus tarjoaa perushuonevarausten toiminnallisuuden, siinä on useita 
 
 Näiden ongelmien käsittely tekee sovelluksesta robustimman, ylläpidettävämmän ja tuotantovalmiimman.
 
+# 4.3. Mitkä olivat tärkeimmät parannukset, jotka teit tekoälyn tuottamaan koodiin ja miksi?
+
+### Mitä AI Jätti Huomiotta
+
+#### 1. Tuotanto-ongelmat
+- Datan pysyvyys (tietokanta-integraatio)
+- Kilpailutilanteet samanaikaisessa käytössä
+- Skaalautuvuusnäkökulmat
+- Suorituskyvyn optimointi
+
+#### 2. Turvallisuuden Vahvistaminen
+- Rate limiting
+- Syvällinen syötteen puhdistus
+- CSRF-suojaus
+- Turvallisuusotsikot
+
+#### 3. Edistynyt UX
+- Lataustilojen indikaattorit
+- Progressiivinen parantelu
+- Optimistiset UI-päivitykset
+- Kattava virheiden palautuminen
+
+#### 4. Virheiden Palautumisstrategiat
+- Uudelleenyrityslogiikka ohimenevillä virheillä
+- Sulava rappeutuminen
+- Offline-tuki
+- Tilan palautuminen virheiden jälkeen
+
+Koodianalyysin antaman johtopäätöksen perusteella keskityin ensiksi kriittisiin ongelmiin. Ensimmäisenä paransin kilpailutilanteen varauksen luonnissa. Seuraavana paransin puuttuvaa validointia kestolle ja aikaväleille. Kolmantena muutin epäjohdonmukaisen virheiden käsittelyä. Kun nämä kriittiset parannukset oli tehty, tein myös analyysin perusteella muut suositellut parannukset. Pysyvyyden puute oli myös kriittinen ongelma, joten tein seuraavassa vaiheessa kevyen json-serveri ratkaisun jolla tämä ongelma oli ratkaistu.Tästä lisää Kappaleessa 6 (6. MVP:stä moderniin sovellukseen), jossa muutin sovellusta moderniksi, mainittavasti käyttäjäystävällisemmäksi ja laajemmaksi kuin pelkkä MVP.
 
 
 
-
-
-
-# 3. Mitkä olivat tärkeimmät parannukset, jotka teit tekoälyn tuottamaan koodiin ja miksi?
-
-
-Koodianalyysin antaman johtopäätöksen perusteella keskityin ensiksi kriittisiin ongelmiin. Ensimmäisenä paransin kilpailutilanteen varauksen luonnissa. Seuraavana paransin puuttuvaa validointia kestolle ja aikaväleille. Kolmantena muutin epäjohdonmukaisen virheiden käsittelyä. Kun nämä kriittiset parannukset oli tehty, tein myös analyysin perusteella molevat muut suositellut parannukset. Pysyvyyden puute oli myös kriittinen ongelma, joten tein seuraavassa vaiheessa kevyen json-serveri ratkaisun jolla tämä ongelma oli ratkaistu.Tästä lisää Vaiheessa 4, jossa muutin sovellusta mainittavasti käyttäjäystävällisemmäksi ja laajemmaksi kuin pelkkä MVP.
-
-
-
-# Kuvakaappaukset sovelluksesta
+# 5. Kuvakaappaukset MVP-versiosta parannusten/korjausten jälkeen
 
 ![image](/assets/conferenceroom_screenshot1.png)
 ![image](/assets/conferenceroom_screenshot2.png)
@@ -554,6 +572,158 @@ Koodianalyysin antaman johtopäätöksen perusteella keskityin ensiksi kriittisi
 
 # *******************************************************
 
+# 6. MVP:stä moderniin sovellukseen (`React` + `Vite`  + `JSON Server`)
+
+Lopullisessa sovelluksessa on vielä useita parannuksia tehtyä. Ensiksi parannin sovelluksen käyttöliittymän. 
+
+
+# 7. Kuvakaappaukset modernista versiosta
+
+![image](/assets/conferenceroomv2_screenshot1.png)
+![image](/assets/conferenceroomv2_screenshot2.png)
+![image](/assets/conferenceroomv2_screenshot3.png)
+![image](/assets/conferenceroomv2_screenshot4.png)
+![image](/assets/conferenceroomv2_screenshot5.png)
+![image](/assets/conferenceroomv2_screenshot6.png)
+![image](/assets/conferenceroomv2_screenshot7.png)
+![image](/assets/conferenceroomv2_screenshot8.png)  
+![image](/assets/conferenceroomv2_screenshot10.png)  
+![image](/assets/conferenceroomv2_screenshot11.png)
+
+
+# 8. Loppuraportti - 🚀 Projektin Kehitys: Prototyypistä Tuotantoon
+
+
+Tämä osio vertailee kahta rakentamaani versiota neuvotteluhuoneiden varausjärjestelmästä. Siinä selitetään tekniset erot, kuinka ne toimivat konepellin alla ja miksi päivitimme moderniin teknologiaan.
+
+---
+
+## 1. Versio 1: MVP (Minimum Viable Product)
+**Teknologiapino:** `Node.js` (Backend) + `Vanilla JavaScript` (Frontend) + `HTML/CSS`
+
+### Kuinka Se Toimii
+Ensimmäinen versio oli "Perinteinen Web-sovellus". Se luotti palvelimen tekevän suurimman osan raskaasta työstä tai yksinkertaisesta suorasta selaimen manipuloinnista.
+
+*   **Tiedostot:** `index.html`, `style.css`, `app.js`.
+*   **Logiikka:** JavaScript oli suoraan vuorovaikutuksessa "DOM":in (Document Object Model) kanssa. Varauksen lisäämiseksi koodi etsi manuaalisesti listaelementin ja lisäsi uuden listItem-merkkijonon.
+*   **Data:** Data oli usein väliaikaista (katosi päivitettäessä).
+
+### Arkkitehtuurikaavio
+```text
++----------+          +--------------+          +----------+
+|   User   | -------> | DOM Listener | -------> | HTML UI  |
++----------+          +--------------+          +----------+
+                              |
+                              v
+                      +--------------+
+                      | Node Server  |
+                      +--------------+
+                              |
+                              v
+                  +-----------------------+
+                  | reservations.json     |
+                  +-----------------------+
+```
+
+### ✅ Edut
+*   **Yksinkertainen:** Erittäin helppo ymmärtää aloittelijoille.
+*   **Ei Rakennusvaihetta:** Muokkaa vain tiedostoa ja päivitä selain.
+
+### ❌ Haitat
+*   **"Spagettikoodi":** Ominaisuuksien kasvaessa käyttöliittymälogiikan sekoittaminen datalogiikkaan tekee tiedostoista valtavia ja vaikeasti hallittavia.
+*   **Vaikea Skaalata:** Monimutkaisten ominaisuuksien, kuten raahaa-ja-pudota -kalenterin, lisääminen vaatii tuhansia rivejä alusta asti kirjoitettua koodia.
+*   **Hitaat Päivitykset:** Vaatii usein koko sivun uudelleenlataamisen muutosten näkemiseksi.
+
+---
+
+## 2. Versio 2: Moderni Sovellus
+**Teknologiapino:** `React` (Frontend Kirjasto) + `Vite` (Rakennustyökalu) + `JSON Server` (REST API)
+
+### Kuinka Se Toimii
+Tämä on **Single Page Application (SPA)**. Sen sijaan että selain lataisi sivuja uudelleen, React ottaa ohjat. Se toimii kuin työpöytäsovellus selaimen sisällä.
+
+*   **Komponentit:** Käyttöliittymä on rakennettu seuraavista rakennuspalikoista: `<Calendar />`, `<Modal />`, `<BookingForm />`.
+*   **Virtuaalinen DOM:** React pitää "piirustusta" käyttöliittymästä muistissa. Kun data muuttuu (alkuaika, huoneen nimi), React päivittää tehokkaasti *vain* muuttuneen tekstin, ei koko sivua.
+*   **Reaktiivinen Tila:** Käytämme "Hookeja" (`useState`, `useEffect`). Kun `reservations`-data haetaan, Kalenteri-komponentti *reagoi* tiukasti uuteen dataan ja piirtää itsensä uudelleen automaattisesti.
+
+### Arkkitehtuurikaavio
+```text
+     FRONTEND (Browser)                   BACKEND (Server)
++-------------------------+          +-----------------------+
+|        User             |          |                       |
+|          |              |          |                       |
+|          v              |          |                       |
+|  +-------------------+  |          |  +-----------------+  |
+|  | Components (UI)   |  |          |  | JSON Server API |  |
+|  +-------------------+  |          |  +-----------------+  |
+|          ^              |          |           ^           |
+|          |              |  Fetch   |           |           |
+|  +-------------------+  |<-------->|           v           |
+|  | React Hooks Logic |  |          |  +-----------------+  |
+|  +-------------------+  |          |  | db.json (DB)    |  |
+|          |              |          |  +-----------------+  |
+|          v              |          |                       |
+|  +-------------------+  |          |                       |
+|  | Virtual DOM Diff  |  |          |                       |
+|  +-------------------+  |          |                       |
++-------------------------+          +-----------------------+
+```
+
+### Keskeiset Päivitykset
+1.  **Komponenttiarkkitehtuuri:** Koodi on uudelleenkäytettävää. `Button`-logiikka kirjoitetaan kerran ja käytetään kaikkialla.
+2.  **REST API:** Frontend ja backend ovat täysin erillisiä. Voit vaihtaa backendin Pythoniin tai Gohon huomenna, eikä Frontend välittäisi.
+3.  **Ekosysteemi:** Otimme käyttöön `react-big-calendar`:in. MVP:ssä olisi pitänyt rakentaa kalenterin matemaattinen ruudukko tyhjästä. Tässä vain "kytkimme sen päälle".
+
+---
+
+## Yhteenvetovertailu
+
+| Ominaisuus | Versio 1 (MVP) | Versio 2 (Moderni) |
+| :--- | :--- | :--- |
+| **Päivitykset** | Manuaalinen DOM-manipulaatio (hidas, virhealtis) | Automaattinen Reaktiivisuus (nopea, luotettava) |
+| **Rakenne** | Yksi iso `app.js`-tiedosto | Useita järjestettyjä `component.jsx`-tiedostoja |
+| **Datavirta** | Vaikea seurata | Selkeä "Props" ja "State" -virta |
+| **Tunne** | Tavallinen Verkkosivusto | Mobiilimainen "Sovellus"-kokemus |
+| **Ylläpito** | Vaikeaa kasvaessa | Helppo laajentaa ja testata |
+
+### Johtopäätös
+**Versio 1** todisti, että *idea* oli hyvä.
+**Versio 2** rakennettiin *tuote*, joka on kestävä, skaalautuva ja valmis todelliseen maailmaan. Ottamalla Reactin käyttöön saimme erityisiä turvatoimia (kuten validointitilat) ja tehokkaita UI-työkaluja (varoitukset, ilmoitukset, modaalit), joiden manuaalinen rakentaminen Versiossa 1 olisi vienyt viikkoja.
+
+#*************************************************
+
+# 8. Sovelluksen ajaminen
+
+## Run Legacy MVP (Port 3000)
+```bash
+node server.js
+```
+→ http://localhost:3000
+
+---
+
+## Run New React + Vite Version
+
+### Terminal 1 - Backend (Port 3001)
+```bash
+cd backend
+npm start
+```
+
+### Terminal 2 - Frontend (Port 5173)
+```bash
+cd frontend
+npm run dev
+```
+→ http://localhost:5173
+
+---
+
+## Run Both Versions Simultaneously
+Open 3 terminals and run:
+1. `node server.js` (Legacy - port 3000)
+2. `cd backend && npm start` (New backend - port 3001)
+3. `cd frontend && npm run dev` (New frontend - port 5173)
 
 ### Mitä AI Jätti Huomiotta (Harvinaisemmat Mallit)
 
