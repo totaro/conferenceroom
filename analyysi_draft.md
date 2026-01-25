@@ -148,7 +148,7 @@ Tuotos
 Sovelluksen toteuttamisessa (MVP ja jatkokehitys) käytin seuraavia työkaluja:
 
 -   ChatGPT (GPT-5.2): Co-pilot promptien luomiseen
--   Claude (Sonnet 4.5): Koodianalyysi, sovelluksen kehitys sekä Co-pilot promptien luomiseen
+-   Claude.ai (Sonnet 4.5): Koodianalyysi, sovelluksen kehitys sekä Co-pilot promptien luomiseen
 -   Antigravity: Sovelluksen luominen ja refaktorointi (Gemini 3 Pro High sekä Claude Sonnet 4.5)
 
 # 4. Katselmointi
