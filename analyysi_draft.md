@@ -1,17 +1,17 @@
 # ANALYYSI
 
-### 1. Tehtävänanto
-### 2. Työnkulku
-### 3. Työkalut ja toteutus
-### 4. Katselmointi
-### - 4.1. 1: Mitä tekoäly teki hyvin
-### - 4.2. 2: Mitä tekoäly teki hyvin
-### - 4.3. 3: Mitkä olivat tärkeimmät parannukset, jotka teit tekoälyn tuottamaan koodiin ja miksi?
-### 5. Kuvakaappaukset MVP-versiosta parannusten/korjausten jälkeen
-### 6. MVP:stä moderniin sovellukseen
-### 7. Kuvakaappaukset modernista versiosta
-### 8. Loppuraportti
-### 9. Sovelluksen ajaminen
+ 1. Tehtävänanto
+ 2. Työnkulku
+ 3. Työkalut ja toteutus
+ 4. Katselmointi
+ - 4.1. 1: Mitä tekoäly teki hyvin
+ - 4.2. 2: Mitä tekoäly teki hyvin
+ - 4.3. 3: Mitkä olivat tärkeimmät parannukset, jotka teit tekoälyn tuottamaan koodiin ja miksi?
+ 5. Kuvakaappaukset MVP-versiosta
+ 6. MVP:stä moderniin sovellukseen (React + Vite + JSON Server)
+ 7. Kuvakaappaukset modernista versiosta
+ 8. Yhteenveto
+ 9. Sovelluksen ajaminen
 
 
 
@@ -152,25 +152,25 @@ Alkuperäisen sovelluksen toteutin käyttämällä seuraavia työkaluja:
 
 # 4. Katselmointi
 
-Katselmoinnin apuna sekä koodianalyysissä käytin Claude AI:ta (Sonnet 4.5).
+Katselmoinnin apuna koodianalyysissä käytin Claude AI:ta (Sonnet 4.5).
 
 # 4.1. Mitä tekoäly teki hyvin? 
 
 ## Yleiskatsaus
-Tämä osio analysoi AI:n generoimaa koodia huonevaraussovellukselle. TTässä käymme läpi, missä AI onnistui hyvin ja mitä tämä kertoo nykyisistä AI-koodigeneroinnin kyvyistä.
+Tämä osio analysoi AI:n generoimaa koodia huonevaraussovellukselle. Tässä käydään läpi, missä AI onnistui hyvin ja mitä tämä kertoo nykyisistä AI-koodigeneroinnin kyvyistä.
 
 ---
 
 ## Missä AI Onnistui
 
-### 1. Toimiva Peruslogiikka
+### 1. Toimiva peruslogiikka
 AI loi toimivan sovelluksen heti alkuun. Perus-CRUD-operaatiot (Create, Read, Delete eli luo, lue, poista) toimivat oikein, mikä on minkä tahansa varausjärjestelmän perusta. Tämä ei ole itsestäänselvyys - monissa käsin koodatuissa sovelluksissa on bugeja perustoiminnallisuuksissa.
 
 **Miksi tämä on tärkeää:** Perusteiden kuntoon saaminen on tärkein osa. Buginen ydin on vaikeampi korjata kuin puuttuvat ominaisuudet.
 
 ---
 
-### 2. Fiksu Päällekkäisyyden Tarkistuslogiikka
+### 2. Fiksu päällekkäisyyden tarkistuslogiikka
 Päällekkäisyyden validointi on itse asiassa todella hyvä:
 ```javascript
 return (start < resEnd && end > resStart);
@@ -204,14 +204,14 @@ API seuraa REST-konventioita oikein sopivilla HTTP-metodeilla ja statuskodeilla:
 
 ---
 
-### 5. Validointi Ennen Muutoksia
+### 5. Validointi ennen muutoksia
 AI erotti validointilogiikan omaksi funktiokseen (`validateReservation`) ja tarkistaa kaikki ehdot ennen tietojen muokkaamista.
 
 **Miksi tämä on tärkeää:** Tämä on hyvää vastuiden erottelua ja tekee koodista testattavan. Se noudattaa periaatetta "validoi, sitten muuta".
 
 ---
 
-### 6. Käyttäjän Vahvistus Tuhoisille Toiminnoille
+### 6. Käyttäjän vahvistus tuhoisille toiminnoille
 ```javascript
 const userConfirmed = confirm('Are you sure you want to cancel this reservation?');
 ```
@@ -229,7 +229,7 @@ ISO 8601 -formaatin käyttö päivämäärille (`toISOString()`) on oikea valint
 
 ---
 
-### 8. Järjestetty Näyttö
+### 8. Järjestetty näyttö
 ```javascript
 reservations.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
 ```
@@ -251,7 +251,7 @@ Aikaleiman lisääminen selaimen välimuistiin tallentamisen estämiseksi on hie
 
 ---
 
-### 10. Kattavat Validointisäännöt
+### 10. Kattavat validointisäännöt
 Validointi tarkistaa useita ehtoja:
 - Kelvollinen päivämääräformaatti
 - Aloitus ennen lopetusta
@@ -262,14 +262,14 @@ Validointi tarkistaa useita ehtoja:
 
 ---
 
-### 11. Siisti, Minimalistinen Käyttöliittymä
+### 11. Siisti, minimalistinen käyttöliittymä
 HTML/CSS on yksinkertainen mutta toimiva. Ei ylitekniikkaa monimutkaisilla frameworkeilla, kun vanilla JavaScript riittää tähän käyttötapaukseen.
 
 **Miksi tämä on tärkeää:** Osoittaa sopivat teknologiavalinnat. Kaikki sovellukset eivät tarvitse Reactia tai Vueta.
 
 ---
 
-### 12. Puolustava Ohjelmointi
+### 12. Puolustava ohjelmointi
 Useita esimerkkejä puolustavasta koodauksesta:
 - `response.ok`:n tarkistus joissain paikoissa
 - Try-catch-lohkot asynkronisille operaatioille
@@ -280,14 +280,14 @@ Useita esimerkkejä puolustavasta koodauksesta:
 
 ---
 
-### 13. Hyvä Muuttujien Nimeäminen
+### 13. Hyvä muuttujien nimeäminen
 Muuttujat kuten `startTime`, `endTime`, `roomId`, `reservations` ovat selkeitä ja itsedokumentoivia. Ei kryptisiä lyhenteitä.
 
 **Miksi tämä on tärkeää:** Koodin luettavuus on ratkaisevan tärkeää ylläpidon kannalta. Hyvä nimeäminen tekee koodista itsestään selittyvän.
 
 ---
 
-### 14. Datan ja Esityksen Erottelu
+### 14. Datan ja esityksen erottelu
 `renderList`-funktio erottaa datan hakemisen näyttölogiikasta.
 
 **Miksi tämä on tärkeää:** Tekee käyttöliittymän päivittämisen helpommaksi riippumatta data-operaatioista. Hyvää vastuiden erottelua.
@@ -298,7 +298,7 @@ Muuttujat kuten `startTime`, `endTime`, `roomId`, `reservations` ovat selkeitä 
 
 ### AI:n Vahvuudet
 
-#### 1. Vakiintuneet Mallit
+#### 1. Vakiintuneet mallit
 AI on erinomainen toteuttamaan vakiintuneita malleja:
 - REST API:t
 - CRUD-operaatiot
@@ -306,48 +306,48 @@ AI on erinomainen toteuttamaan vakiintuneita malleja:
 
 Nämä mallit esiintyvät usein harjoitusdatassa, joten AI toistaa ne luotettavasti.
 
-#### 2. Matemaattinen/Looginen Oikeellisuus
+#### 2. Matemaattinen/Looginen oikeellisuus
 Päällekkäisyyden tarkistusalgoritmi osoittaa, että AI pystyy käsittelemään:
 - Logiikkaongelmia
 - Matemaattista oikeellisuutta
 - Reunatapauksia (tunnetuissa skenaarioissa)
 
-#### 3. Parhaat Käytännöt
+#### 3. Parhaat käytännöt
 AI noudattaa alan parhaita käytäntöjä, joita se on kohdannut monta kertaa:
 - UUID:t turvallisuutta varten
 - ISO-päivämäärät johdonmukaisuutta varten
 - RESTful-suunnittelu API:lle
 - Vastuiden erottelu
 
-#### 4. Nopea Prototyyppien Luonti
+#### 4. Nopea prototyyppien luonti
 AI luo toimivia prototyyppejä nopeasti:
 - Kaikki ydinominaisuudet toiminnallisia
 - Ei syntaksivirheitä
 - Järkevät oletusarvot
 - Heti käyttöönotettavissa testaukseen
 
-#### 5. Yleiset Reunatapaukset
+#### 5. Yleiset reunatapaukset
 Käsittelee usein esiintyviä reunatapauksia:
 - Tyhjät listat
 - Käyttäjävahvistukset
 - Päivämäärän validointi
 - Virhevastaukseet
 
-## Keskeiset Havainnot
+## Keskeiset havainnot
 
-### 1. AI Loistaa Yleisessä
+### 1. AI loistaa yleisessä
 Mallit, jotka esiintyvät usein harjoitusdatassa, toistetaan tarkasti ja luotettavasti.
 
-### 2. AI Noudattaa Konventioita
+### 2. AI noudattaa konventioita
 Koodi noudattaa vakiintuneita konventioita ja parhaita käytäntöjä, jotka on hyvin dokumentoitu.
 
-### 3. AI Luo Toimivaa Koodia
+### 3. AI luo toimivaa koodia
 Tämä ei ole vain syntaktisesti oikein - se on toiminnallisesti järkevää ja todella toimii.
 
-### 4. Kokemus vs. Tieto -aukko
+### 4. Kokemus vs. tieto -aukko
 Kuilu AI-generoidun koodin ja tuotantovalmiuden välillä edustaa eroa **tietämisen** ja **kokemisen** välillä.
 
-### 5. Erinomainen Lähtökohta
+### 5. Erinomainen lähtökohta
 AI-generoitu koodi on erinomainen pohja, jota kokeneet kehittäjät voivat rakentaa ja vahvistaa.
 
 ---
@@ -370,7 +370,7 @@ Kehittäjille tämä tarkoittaa:
 - **Parasta yhteistyössä** - AI generoi, ihmiset hioivat
 - **Erinomainen oppimisresurssi** - Näe parhaat käytännöt toteutettuna
 
-Se, että pystyimme tunnistamaan tiettyjä, korjattavissa olevia ongelmia (eikä perustavanlaatuisia puutteita), osoittaa kuinka pitkälle AI-koodigenerointi on tullut. Tämä koodi ei ole vain demo - se on legitiimi lähtökohta oikealle sovellukselle.
+Se, että analyysissä pystyimme tunnistamaan tiettyjä, korjattavissa olevia ongelmia (eikä perustavanlaatuisia puutteita), osoittaa kuinka pitkälle AI-koodigenerointi on tullut. Tämä koodi ei ole vain demo - se on legitiimi lähtökohta oikealle sovellukselle.
 
 
 
@@ -538,7 +538,7 @@ Näiden ongelmien käsittely tekee sovelluksesta robustimman, ylläpidettävämm
 - Skaalautuvuusnäkökulmat
 - Suorituskyvyn optimointi
 
-#### 2. Turvallisuuden Vahvistaminen
+#### 2. Turvallisuuden vahvistaminen
 - Rate limiting
 - Syvällinen syötteen puhdistus
 - CSRF-suojaus
@@ -550,7 +550,7 @@ Näiden ongelmien käsittely tekee sovelluksesta robustimman, ylläpidettävämm
 - Optimistiset UI-päivitykset
 - Kattava virheiden palautuminen
 
-#### 4. Virheiden Palautumisstrategiat
+#### 4. Virheiden palautumisstrategiat
 - Uudelleenyrityslogiikka ohimenevillä virheillä
 - Sulava rappeutuminen
 - Offline-tuki
@@ -560,7 +560,7 @@ Koodianalyysin antaman johtopäätöksen perusteella keskityin ensiksi kriittisi
 
 
 
-# 5. Kuvakaappaukset MVP-versiosta parannusten/korjausten jälkeen
+# 5. Kuvakaappaukset MVP-versiosta
 
 ![image](/assets/conferenceroom_screenshot1.png)
 ![image](/assets/conferenceroom_screenshot2.png)
@@ -570,11 +570,102 @@ Koodianalyysin antaman johtopäätöksen perusteella keskityin ensiksi kriittisi
 ![image](/assets/conferenceroom_screenshot7.png)
 ![image](/assets/conferenceroom_screenshot8.png)
 
-# *******************************************************
+
 
 # 6. MVP:stä moderniin sovellukseen (`React` + `Vite`  + `JSON Server`)
 
-Lopullisessa sovelluksessa on vielä useita parannuksia tehtyä. Ensiksi parannin sovelluksen käyttöliittymän. 
+Modernin sovelluksen kehittämisessä apuna käytin Claudea. Tässä on tekninen arkkitehtuuri- ja yleiskatsaus tästä modernista sovelluksesta.
+
+Tämä osio tarjoaa yhteenvedon huonevaraussovelluksen järjestelmäsuunnitteluun, komponenttilogiikkaan ja datavirtaan.
+
+---
+
+## 📦 Korkean tason arkkitehtuuri
+
+Sovellus noudattaa standardia **Client-Server** (Asiakas-Palvelin) -arkkitehtuuria:
+
+```text
+      FRONTEND (React + Vite)                    BACKEND (Node.js)
++---------------------------------+          +-----------------------+
+|  [App.jsx] ---> [BookingForm]   |          |                       |
+|       |                         |          |                       |
+|       v                         |  HTTP    |  [server.js] (Asennus)|
+|  [Calendar]     [Modal]         | <------> |          |            |
+|                                 |  JSON    |          v            |
+|  (Tila: varaukset, huoneet)     |          |      [db.json]        |
+|                                 |          |                       |
++---------------------------------+          +-----------------------+
+```
+
+*   **Frontend:** Single Page Application (SPA), joka on rakennettu **Reactilla**, hyödyntäen hookeja tilanhallintaan ja `react-big-calendar`-kirjastoa.
+*   **Backend:** `json-server`:in tarjoama RESTful API, joka toimii kevyenä tietokantakerroksena `db.json`-tiedoston päällä.
+*   **Kommunikaatio:** Asynkroniset HTTP-pyynnöt (`GET`, `POST`, `DELETE`) käyttäen natiivia `fetch`-rajapintaa.
+
+---
+
+## 📂 Projektin rakenne
+
+*   **/frontend**: Reactin lähdekoodi.
+    *   `src/App.jsx`: Sovelluksen "Aivot". Hallinnoi globaalia tilaa (`rooms`, `reservations`) ja ohjaa näkymiä.
+    *   `src/components/`: (Looginen erottelu) Modaalit, Lomakkeet ja Listat on toteutettu App:in sisällä tai alikomponentteina.
+    *   `src/App.css`: Keskitetty Suunnittelujärjestelmä (Muuttujat) ja komponenttikohtainen tyylittely.
+*   **/backend**: API ja Pysyvyys.
+    *   `db.json`: JSON-tiedosto (Tietokanta). Tallentaa `rooms`- ja `reservations`-taulukot.
+    *   `package.json`: Konfiguroi json-serverin käynnistysskriptit.
+
+---
+
+## 🛠️ Ominaisuudet
+
+### 1. Tilanhallinta & datavirta
+`App.jsx` käsittelee keskitettyä **Totuuden Lähdettä**.
+
+*   **Alkullataus:** `useEffect` käynnistää samanaikaiset haut osoitteisiin `http://localhost:3001/rooms` ja `reservations`.
+*   **Reaktiivisuus:** Kun varaus luodaan (POST) tai poistetaan (DELETE), frontend odottaa palvelimen vastausta (200 OK) ennen datan uudelleenhakua, jotta Kalenterin käyttöliittymä pysyy synkroonissa.
+
+### 2. Kalenterijärjestelmä
+Hyödynnetään `react-big-calendar`:ia, joka on kääritty `moment.js`-lokalisoijalla.
+
+*   **Vuorovaikutus:** Aikavälin klikkaaminen laukaisee `handleSelectSlot`-toiminnon, joka nappaa `alku`- ja `loppu`-ajat ja avaa Varaus-modaalin.
+*   **Tapahtumat:** Raaka JSON-data mäpätään kalenteriobjekteiksi: `{ title, start: new Date(), end: new Date() }`.
+
+### 3. Älykäs validointilogiikka
+Validointi tapahtuu asiakaspuolella (Client Side) ennen kuin yhtään pyyntöä lähetetään.
+
+*   **Päällekkäisyyden tunnistus:** Algoritmi tarkistaa onko `(UusiAlku < OlemassaOlevaLoppu) && (UusiLoppu > OlemassaOlevaAlku)` samassa huoneessa.
+*   **Liiketoimintasäännöt:** Estää varauksen menneisyydessä, varauksen ilman huonetta, tai varauksen päättymisajan ennen alkuaikaa.
+*   **Palaute:** Asettaa `formErrors`-tilan, joka ehdollisesti renderöi virheviestit syötekenttien alle.
+
+### 4. Visuaalinen palautejärjestelmä
+Käyttäjiä ei koskaan jätetä arvailemaan tilamuutoksia.
+
+*   **Lataus:** Ehdollinen renderöinti näyttää geneerisen latausruudun huoneille, ja spesifin "Päällysspinnerin" kalenteridatalle.
+*   **Toastit:** Kustomoitu `Notification`-järjestelmä väläyttää onnistumisen (vihreä) tai virheen (punainen) viestit näkymän yläosassa.
+*   **Vahvistukset:** Tuhoisat toiminnot (Poista) laukaisevat toissijaisen "Oletko varma?" -modaalikerroksen.
+
+---
+
+## ⚡ Keskeiset Toiminnot Viite
+
+| Funktio | Konteksti | Tarkoitus |
+| :--- | :--- | :--- |
+| `handleSelectSlot` | Kalenteri | Nappaa raahauksen/klikkauksen ajat ja avaa Luontimodaalin. |
+| `handleSelectEvent` | Kalenteri | Avaa "Yksityiskohdat"-modaalin olemassa olevalle varaukselle. |
+| `handleConfirmDelete` | Modaali | Suorittaa `DELETE`-pyynnön ja siivoaa UI-tilan. |
+| `checkOverlap` | Validointi | Boolean-logiikka varmistamaan ettei tuplavarauksia tapahdu. |
+| `showNotification` | UI Apuohjelma | Laukaisee lyhytkestoisen toast-viestin aikakatkaisulla. |
+
+---
+
+## 🚀 Suorituskyky & UI UX
+
+*   **Optimistinen UI:** Odottaessamme palvelimen vahvistusta, estämme vuorovaikutuksen (`disabled`-tilat) estääksemme kilpailutilanteet (race conditions).
+*   **CSS muuttujat:** Käytetään `:root`-muuttujia (esim. `--primary-blue`, `--glass-bg`) ylläpitääksemme johdonmukaista "Glassmorphism"-teemaa.
+*   **Responsiivinen:** Layout joustaa (CSS Flexbox) mukautuakseen eri näyttökokoihin, varmistaen kalenterin käytettävyyden.
+*   **Pysyvyys:** `json-server` kirjoittaa levylle välittömästi, joten data selviää palvelimen uudelleenkäynnistyksistä.
+
+
+Promptit.md tiedoston `Osio 6: MVP:stä moderniin sovellukseen (kehitysvaihe)` -osiossa nähdään uuden modernin version kehittämisessä käyty keskustelu.
 
 
 # 7. Kuvakaappaukset modernista versiosta
@@ -591,7 +682,7 @@ Lopullisessa sovelluksessa on vielä useita parannuksia tehtyä. Ensiksi paranni
 ![image](/assets/conferenceroomv2_screenshot11.png)
 
 
-# 8. Loppuraportti - 🚀 Projektin Kehitys: Prototyypistä Tuotantoon
+# 8. Yhteenveto - 🚀 Projektin kehitys: Prototyypistä tuotantoon
 
 
 Tämä osio vertailee kahta rakentamaani versiota neuvotteluhuoneiden varausjärjestelmästä. Siinä selitetään tekniset erot, kuinka ne toimivat konepellin alla ja miksi päivitimme moderniin teknologiaan.
@@ -601,7 +692,7 @@ Tämä osio vertailee kahta rakentamaani versiota neuvotteluhuoneiden varausjär
 ## 1. Versio 1: MVP (Minimum Viable Product)
 **Teknologiapino:** `Node.js` (Backend) + `Vanilla JavaScript` (Frontend) + `HTML/CSS`
 
-### Kuinka Se Toimii
+### Toiminta
 Ensimmäinen versio oli "Perinteinen Web-sovellus". Se luotti palvelimen tekevän suurimman osan raskaasta työstä tai yksinkertaisesta suorasta selaimen manipuloinnista.
 
 *   **Tiedostot:** `index.html`, `style.css`, `app.js`.
@@ -627,24 +718,24 @@ Ensimmäinen versio oli "Perinteinen Web-sovellus". Se luotti palvelimen tekevä
 
 ### ✅ Edut
 *   **Yksinkertainen:** Erittäin helppo ymmärtää aloittelijoille.
-*   **Ei Rakennusvaihetta:** Muokkaa vain tiedostoa ja päivitä selain.
+*   **Ei rakennusvaihetta:** Muokkaa vain tiedostoa ja päivitä selain.
 
 ### ❌ Haitat
 *   **"Spagettikoodi":** Ominaisuuksien kasvaessa käyttöliittymälogiikan sekoittaminen datalogiikkaan tekee tiedostoista valtavia ja vaikeasti hallittavia.
-*   **Vaikea Skaalata:** Monimutkaisten ominaisuuksien, kuten raahaa-ja-pudota -kalenterin, lisääminen vaatii tuhansia rivejä alusta asti kirjoitettua koodia.
-*   **Hitaat Päivitykset:** Vaatii usein koko sivun uudelleenlataamisen muutosten näkemiseksi.
+*   **Vaikea skaalata:** Monimutkaisten ominaisuuksien, kuten drag-and-drop -kalenterin, lisääminen vaatii tuhansia rivejä alusta asti kirjoitettua koodia.
+*   **Hitaat päivitykset:** Vaatii usein koko sivun uudelleenlataamisen muutosten näkemiseksi.
 
 ---
 
 ## 2. Versio 2: Moderni Sovellus
 **Teknologiapino:** `React` (Frontend Kirjasto) + `Vite` (Rakennustyökalu) + `JSON Server` (REST API)
 
-### Kuinka Se Toimii
+### Toiminta
 Tämä on **Single Page Application (SPA)**. Sen sijaan että selain lataisi sivuja uudelleen, React ottaa ohjat. Se toimii kuin työpöytäsovellus selaimen sisällä.
 
 *   **Komponentit:** Käyttöliittymä on rakennettu seuraavista rakennuspalikoista: `<Calendar />`, `<Modal />`, `<BookingForm />`.
 *   **Virtuaalinen DOM:** React pitää "piirustusta" käyttöliittymästä muistissa. Kun data muuttuu (alkuaika, huoneen nimi), React päivittää tehokkaasti *vain* muuttuneen tekstin, ei koko sivua.
-*   **Reaktiivinen Tila:** Käytämme "Hookeja" (`useState`, `useEffect`). Kun `reservations`-data haetaan, Kalenteri-komponentti *reagoi* tiukasti uuteen dataan ja piirtää itsensä uudelleen automaattisesti.
+*   **Reaktiivinen:** Käytämme "Hookeja" (`useState`, `useEffect`). Kun `reservations`-data haetaan, Kalenteri-komponentti *reagoi* uuteen dataan ja piirtää itsensä uudelleen automaattisesti.
 
 ### Arkkitehtuurikaavio
 ```text
@@ -669,10 +760,10 @@ Tämä on **Single Page Application (SPA)**. Sen sijaan että selain lataisi siv
 +-------------------------+          +-----------------------+
 ```
 
-### Keskeiset Päivitykset
+### Keskeiset päivitykset
 1.  **Komponenttiarkkitehtuuri:** Koodi on uudelleenkäytettävää. `Button`-logiikka kirjoitetaan kerran ja käytetään kaikkialla.
 2.  **REST API:** Frontend ja backend ovat täysin erillisiä. Voit vaihtaa backendin Pythoniin tai Gohon huomenna, eikä Frontend välittäisi.
-3.  **Ekosysteemi:** Otimme käyttöön `react-big-calendar`:in. MVP:ssä olisi pitänyt rakentaa kalenterin matemaattinen ruudukko tyhjästä. Tässä vain "kytkimme sen päälle".
+3.  **Ekosysteemi:** Käytettiin `react-big-calendar`:ia. MVP:ssä olisi pitänyt rakentaa kalenterin matemaattinen ruudukko tyhjästä. Tässä vain "kytkimme sen päälle".
 
 ---
 
@@ -688,11 +779,11 @@ Tämä on **Single Page Application (SPA)**. Sen sijaan että selain lataisi siv
 
 ### Johtopäätös
 **Versio 1** todisti, että *idea* oli hyvä.
-**Versio 2** rakennettiin *tuote*, joka on kestävä, skaalautuva ja valmis todelliseen maailmaan. Ottamalla Reactin käyttöön saimme erityisiä turvatoimia (kuten validointitilat) ja tehokkaita UI-työkaluja (varoitukset, ilmoitukset, modaalit), joiden manuaalinen rakentaminen Versiossa 1 olisi vienyt viikkoja.
+**Versio 2** rakennettiin *tuote*, joka on kestävä, skaalautuva ja valmis todelliseen maailmaan. Ottamalla Reactin käyttöön saatiin erityisiä turvatoimia (kuten validointitilat) ja tehokkaita UI-työkaluja (varoitukset, ilmoitukset, modaalit), joiden manuaalinen rakentaminen Versiossa 1 olisi vienyt viikkoja.
 
-#*************************************************
 
-# 8. Sovelluksen ajaminen
+
+# 9. Sovelluksen ajaminen
 
 ## Run Legacy MVP (Port 3000)
 ```bash
@@ -724,153 +815,3 @@ Open 3 terminals and run:
 1. `node server.js` (Legacy - port 3000)
 2. `cd backend && npm start` (New backend - port 3001)
 3. `cd frontend && npm run dev` (New frontend - port 5173)
-
-### Mitä AI Jätti Huomiotta (Harvinaisemmat Mallit)
-
-#### 1. Tuotanto-ongelmat
-- Datan pysyvyys (tietokanta-integraatio)
-- Kilpailutilanteet samanaikaisessa käytössä
-- Skaalautuvuusnäkökulmat
-- Suorituskyvyn optimointi
-
-#### 2. Turvallisuuden Vahvistaminen
-- Rate limiting
-- Syvällinen syötteen puhdistus
-- CSRF-suojaus
-- Turvallisuusotsikot
-
-#### 3. Edistynyt UX
-- Lataustilojen indikaattorit
-- Progressiivinen parantelu
-- Optimistiset UI-päivitykset
-- Kattava virheiden palautuminen
-
-#### 4. Virheiden Palautumisstrategiat
-- Uudelleenyrityslogiikka ohimenevillä virheillä
-- Sulava rappeutuminen
-- Offline-tuki
-- Tilan palautuminen virheiden jälkeen
-
----
-
-## Vertailu Ihmiskehittäjiin
-
-### AI-koodi ≈ Junior-Mid Level Kehittäjä
-
-AI loi periaatteessa sen, mitä pätevä junior- tai keskitason kehittäjä loisi prototyypille tai MVP:lle.
-
-**Mitä AI Sai Oikein (Oppikirjatieto):**
-- Vakiintuneet mallit
-- Yleiset algoritmit
-- Perus-parhaat käytännöt
-- Syntaktinen oikeellisuus
-
-**Mitä AI Jätti Huomiotta (Tuotantokokemus):**
-- Todelliset reunatapaukset
-- Suorituskyky skaalauksessa
-- Turvallisuuden syvyys
-- Monimutkaiset virhetilanteet
-
-Nämä puuttuvat elementit tulevat **tuotantokokemuksesta** ennemmin kuin teoreettisesta tiedosta. Ne ovat asioita, jotka kehittäjät oppivat toimitettuaan koodia oikeille käyttäjille.
-
----
-
-## Käytännön Arviointi
-
-### Prototyypille/MVP:lle: ★★★★★ (5/5)
-- Heti toimiva
-- Kattaa ydinvaatimukset
-- Siisti, luettava koodi
-- Hyvä lähtökohta
-
-### Sisäiselle Työkalulle (Vähän Liikennettä): ★★★★☆ (4/5)
-- Toimisi hyvin sellaisenaan
-- Pieniä parannuksia tarvitaan
-- Hyväksyttävä rajoitettuun käyttöön
-- Helppo ylläpitää
-
-### Tuotantosovellukselle: ★★★☆☆ (3/5)
-- Vaatii merkittävää vahvistamista
-- Puuttuu kriittisiä ominaisuuksia
-- Vaatii turvallisuuskatselmuksen
-- Suorituskykynäkökulmat tarvitaan
-
----
-
-## Keskeiset Havainnot
-
-### 1. AI Loistaa Yleisessä
-Mallit, jotka esiintyvät usein harjoitusdatassa, toistetaan tarkasti ja luotettavasti.
-
-### 2. AI Noudattaa Konventioita
-Koodi noudattaa vakiintuneita konventioita ja parhaita käytäntöjä, jotka on hyvin dokumentoitu.
-
-### 3. AI Luo Toimivaa Koodia
-Tämä ei ole vain syntaktisesti oikein - se on toiminnallisesti järkevää ja todella toimii.
-
-### 4. Kokemus vs. Tieto -aukko
-Kuilu AI-generoidun koodin ja tuotantovalmiuden välillä edustaa eroa **tietämisen** ja **kokemisen** välillä.
-
-### 5. Erinomainen Lähtökohta
-AI-generoitu koodi on erinomainen pohja, jota kokeneet kehittäjät voivat rakentaa ja vahvistaa.
-
----
-
-## Johtopäätös
-
-Tämä AI-generoitu koodi on aidosti vaikuttava. Se osoittaa, että nykyinen AI pystyy:
-
-✅ Luomaan toimivia sovelluksia tyhjästä  
-✅ Toteuttamaan oikeat algoritmit  
-✅ Noudattamaan alan parhaita käytäntöjä  
-✅ Kirjoittamaan siistiä, luettavaa koodia  
-✅ Käsittelemään yleisiä reunatapauksia  
-
-Löytämämme rajoitukset eivät ole epäonnistumisia - ne ovat luonnollinen raja **oppikirjatiedon** ja **taistelussa testatun kokemuksen** välillä. AI loi tarkalleen sen, mitä odottaisi vahvasta teoreettisesta pohjasta ilman todellista tuotantokokemusta.
-
-Kehittäjille tämä tarkoittaa:
-- **AI on tehokas prototyyppityökalu** - Saa toimivan koodin nopeasti
-- **Ihmisasiantuntemus on edelleen ratkaisevan tärkeää** - Tuotannon vahvistamiseen
-- **Parasta yhteistyössä** - AI generoi, ihmiset hioivat
-- **Erinomainen oppimisresurssi** - Näe parhaat käytännöt toteutettuna
-
-Se, että pystyimme tunnistamaan tiettyjä, korjattavissa olevia ongelmia (eikä perustavanlaatuisia puutteita), osoittaa kuinka pitkälle AI-koodigenerointi on tullut. Tämä koodi ei ole vain demo - se on legitiimi lähtökohta oikealle sovellukselle.
-
----
-
-## Suositukset
-
-### Milloin Käyttää AI-generoitua Koodia Sellaisenaan:
-- Prototyypit ja MVP:t
-- Oppimisprojektit
-- Sisäiset työkalut rajoitetulle käyttäjämäärälle
-- Konseptitodistukset
-
-### Milloin Parantaa AI-generoitua Koodia:
-- Tuotantosovellukset
-- Korkean liikenteen järjestelmät
-- Turvallisuuskriittiset sovellukset
-- Elintärkeät palvelut
-
-### Paras Käytäntö:
-Käytä AI:ta pohjan generointiin, sitten sovella ihmisasiantuntemusta:
-- Lisää tuotannon vahvistaminen
-- Toteuta edistynyt virheiden käsittely
-- Optimoi skaalausta varten
-- Lisää domain-spesifinen logiikka
-- Suorita turvallisuuskatselmus
-
-Tämä AI:n nopeuden ja ihmiskokemuksen yhdistelmä tuottaa parhaat tulokset.
-
----
-
-## Lopuksi
-
-AI-koodigenerointi on kehittynyt valtavasti. Tämä esimerkki osoittaa, että:
-
-- AI voi luoda **tuotantokelpoiset perusteet** nopeasti
-- Ihmiskehittäjät voivat **keskittyä korkeamman tason ongelmiin**
-- Yhteistyö AI:n kanssa on **tehokkuutta ja laatua**
-- Tulevaisuus on **augmentoitu kehitys**, ei täysi automatisointi
-
-Käytä AI:ta hyväksesi, mutta muista että paras lopputulos syntyy, kun yhdistät koneen tehokkuuden ja ihmisen kokemuksen.
