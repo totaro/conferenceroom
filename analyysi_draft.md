@@ -80,7 +80,7 @@ Luo tiedosto nimeltä ANALYYSI.md. Vastaa siinä seuraaviin kysymyksiin suomeksi
 2. Mitä tekoäly teki huonosti? 
 3. Mitkä olivat tärkeimmät parannukset, jotka teit tekoälyn tuottamaan koodiin ja miksi? 
 
-# 3. Työkalut ja toteutus (Vaihe 1: Tekoäly parikoodaajana)
+# 3. Työkalut ja toteutus
 
 Alkuräisen sovelluksen tavoitteena oli toteuttaa yksinkertainen kokoushuoneiden varausrajapinta (API). Tämän tein MVP (minimum viable product) -periaatteella, eli pyrin saamaan toimivan perusversion mahdollisimman nopeasti. 
 
@@ -145,10 +145,11 @@ Tuotos
 - Toimiva MVP, joka demonstroi vain ydintoiminnallisuuden
 - Ei ylimääräisiä ominaisuuksia tai optimointeja
 
-Alkuperäisen sovelluksen toteutin käyttämällä seuraavia työkaluja:
+Sovelluksen toteuttamisessa (MVP ja jatkokehitys) käytin seuraavia työkaluja:
 
--   ChatGPT: Co-pilot promptien luomiseen
--   Antigravity: Koodin luomiseen ja refaktorointiin (Gemini 3 Pro High)
+-   ChatGPT (GPT-5.2): Co-pilot promptien luomiseen
+-   Claude (Sonnet 4.5): Koodianalyysi, sovelluksen kehitys sekä Co-pilot promptien luomiseen
+-   Antigravity: Sovelluksen luominen ja refaktorointi (Gemini 3 Pro High sekä Claude Sonnet 4.5)
 
 # 4. Katselmointi
 
