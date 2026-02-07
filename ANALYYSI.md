@@ -1,4 +1,4 @@
-# ANALYYSI - Tommi Rouvali
+# ANALYYSI - Tommi R.
 
  1. Tehtävänanto
  2. Työnkulku
@@ -816,3 +816,4 @@ Open 3 terminals and run:
 1. `node server.js` (Legacy - port 3000)
 2. `cd backend && npm start` (New backend - port 3001)
 3. `cd frontend && npm run dev` (New frontend - port 5173)
+
